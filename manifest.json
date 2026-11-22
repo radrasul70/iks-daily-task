@@ -1,0 +1,18 @@
+{
+  "name": "دیلی تسک صوتی بازرگانی",
+  "short_name": "دیلی تسک",
+  "description": "سامانه مدیریت صوتی و گروهی کارهای بازرگانی با تقویم شمسی",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

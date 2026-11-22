@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="دیلی تسک" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <title>دیلی تسک صوتی گروهی بازرگانی - نسخه ۸</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 12px;
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+    .box {
+      max-width: 1320px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    }
+    .login-box {
+      max-width: 440px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
+    }
+    .login-box h2 {
+      margin-top: 0;
+      color: #1e3a8a;
+      font-size: 19px;
+      text-align: center;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 12px;
+    }
+    .field-group {
+      margin-bottom: 12px;
+    }
+    .field-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13.5px;
+      font-weight: bold;
+      color: #334155;
+    }
+    .field-group input, .field-group select {
+      width: 100%;
+    }
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      color: #1e3a8a;
+    }
+    .today-badge {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .user-panel {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .user-badge {
+      background: #1e40af;
+      color: #ffffff;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .role-badge {
+      background: #0f766e;
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .admin-users-panel {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13.5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-mic {
+      background-color: #dc2626;
+      color: #ffffff;
+      padding: 14px 22px;
+      font-size: 15px;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+    }
+    .btn-mic.active {
+      background-color: #16a34a;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    }
+    .btn-add {
+      background-color: #2563eb;
+      color: #ffffff;
+    }
+    .btn-export {
+      background-color: #0f766e;
+      color: #ffffff;
+    }
+    .btn-purple {
+      background-color: #6d28d9;
+      color: #ffffff;
+    }
+    .btn-logout {
+      background-color: #475569;
+      color: #ffffff;
+      padding: 6px 12px;
+      font-size: 12.5px;
+    }
+    .btn-done {
+      background-color: #16a34a;
+      color: #ffffff;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .btn-del {
+      background-color: #ef4444;
+      color: #ffffff;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    input, select {
+      padding: 9px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13.5px;
+      background: #fff;
+    }
+    .status {
+      background: #f8fafc;
+      border: 1px dashed #94a3b8;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 13.5px;
+      line-height: 1.7;
+    }
+    .hints {
+      font-size: 12.5px;
+      color: #475569;
+      line-height: 1.75;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .expert-tag {
+      background: #e0e7ff;
+      color: #1e3a8a;
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-weight: bold;
+      font-size: 12px;
+      display: inline-block;
+    }
+    .manager-tag {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 11.5px;
+      display: inline-block;
+      margin-top: 3px;
+    }
+    .jalali-pill {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #0f172a;
+      display: inline-block;
+      direction: ltr;
+    }
+    .jalali-picker-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+    .jalali-picker-inline select, .jalali-picker-inline input {
+      padding: 5px 6px;
+      font-size: 12.5px;
+    }
+    .table-wrap {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1040px;
+    }
+    th, td {
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 8px;
+      text-align: right;
+      font-size: 13.5px;
+    }
+    th {
+      background-color: #f8fafc;
+    }
+    tr.done-row {
+      background-color: #dcfce7;
+    }
+    tr.overdue-row {
+      background-color: #fee2e2;
+    }
+    .hidden {
+      display: none !important;
+    }
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .box { padding: 12px; }
+      .btn-mic { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- بخش ۱: صفحه ورود با نام کاربری و رمز عبور -->
+  <div id="loginView" class="login-box">
+    <h2>ورود به سامانه دیلی تسک بازرگانی</h2>
+    <div class="field-group">
+      <label for="loginUsername">نام کاربری:</label>
+      <input id="loginUsername" type="text" placeholder="مثلاً admin یا نام کاربری کارشناس" autocomplete="username" />
+    </div>
+    <div class="field-group">
+      <label for="loginPassword">رمز عبور:</label>
+      <input id="loginPassword" type="password" placeholder="رمز عبور خود را وارد کنید" autocomplete="current-password" />
+    </div>
+    <button type="button" class="btn-add" id="loginBtn" style="width:100%; padding:11px; font-size:15px;">ورود به پنل</button>
+    <div id="loginError" style="color:#dc2626; font-size:13px; margin-top:10px; text-align:center;"></div>
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px; margin-top:14px; font-size:12px; color:#475569; line-height:1.7;">
+      <b>اطلاعات ورود پیش‌فرض:</b><br/>
+      • مدیر بازرگانی: نام کاربری <code>admin</code> | رمز <code>123</code><br/>
+      • کارشناس خرید نمونه: نام کاربری <code>buyer1</code> | رمز <code>123</code>
+    </div>
+  </div>
+
+  <!-- بخش ۲: داشبورد اصلی برنامه -->
+  <div id="appView" class="box hidden">
+    <div class="header">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
+        <h1>دیلی تسک صوتی بازرگانی (نسخه ۸)</h1>
+        <span id="todayJalaliBadge" class="today-badge">امروز: ...</span>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="btn-purple hidden" id="toggleUsersBtn">👥 مدیریت کارشناسان (یوزر و پسورد)</button>
+        <button type="button" class="btn-export" id="exportBtn">خروجی اکسل (CSV)</button>
+        <button type="button" class="btn-add" id="alarmTestBtn">تست زنگ آلارم</button>
+        <button type="button" class="btn-logout" id="logoutBtn">خروج از حساب</button>
+      </div>
+    </div>
+
+    <!-- نوار اطلاعات کاربر وارد شده و فیلتر -->
+    <div class="user-panel">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
+        <span><b>پنل کارشناس فعلی:</b></span>
+        <span id="currentUserNameBadge" class="user-badge">...</span>
+        <span id="currentUserRoleBadge" class="role-badge">...</span>
+      </div>
+
+      <div id="filterWrapper" style="display:flex; align-items:center; gap:8px;">
+        <label for="filterExpert"><b>نمایش کارهای:</b></label>
+        <select id="filterExpert">
+          <option value="ALL">همه کارشناسان</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- پنل مدیریت کاربران (فقط برای مدیر بازرگانی) -->
+    <div id="adminUsersPanel" class="admin-users-panel hidden">
+      <h3 style="margin:0 0 10px 0; font-size:15px; color:#1e3a8a;">مدیریت حساب‌های کاربری تیم بازرگانی</h3>
+      <div class="controls">
+        <input id="newFullName" type="text" placeholder="نام و نام خانوادگی کارشناس (مثلاً علی رضایی)" style="min-width:210px;" />
+        <select id="newUserRole">
+          <option value="کارشناس خرید">کارشناس خرید</option>
+          <option value="مدیر بازرگانی">مدیر بازرگانی</option>
+        </select>
+        <input id="newUsername" type="text" placeholder="نام کاربری (انگلیسی)" style="width:150px;" />
+        <input id="newPassword" type="text" placeholder="رمز عبور" style="width:130px;" />
+        <button type="button" class="btn-add" id="createUserBtn">+ ساخت حساب کارشناس</button>
+      </div>
+      <div class="table-wrap">
+        <table style="min-width:600px;">
+          <thead>
+            <tr>
+              <th>نام کارشناس</th>
+              <th>سمت سازمانی</th>
+              <th>نام کاربری</th>
+              <th>رمز عبور</th>
+              <th>عملیات</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- بخش فرمان صوتی و انتخاب کارشناس هدف برای مدیر -->
+    <div class="controls">
+      <button type="button" id="micBtn" class="btn-mic">🎤 شروع فرمان صوتی (فارسی)</button>
+
+      <div id="assignSelectWrapper" class="hidden" style="display:flex; align-items:center; gap:6px; background:#fefce8; border:1px solid #fde047; padding:8px 12px; border-radius:10px;">
+        <label for="assignToSelect" style="font-size:13px; font-weight:bold; color:#854d0e;">ارجاع تسک به:</label>
+        <select id="assignToSelect"></select>
+      </div>
+    </div>
+
+    <div class="hints">
+      <b>راهنمای فرمان‌های صوتی و ارجاع کار:</b><br/>
+      • <b>تاریخ شمسی و نسبی:</b> «پیگیری ترخیص کانتینر <b>پنجم آذر ساعت ۱۰ و نیم</b>» | «استعلام قیمت <b>۱۵ دی ساعت ۱۴</b>» | «تماس با تامین‌کننده <b>فردا ساعت ۱۱</b>»<br/>
+      • <b>به‌روزرسانی وضعیت:</b> «<b>مورد یک حل شد</b>» | «<b>مورد یک هفتاد درصد</b>»<br/>
+      • <b>نکته برای مدیر بازرگانی:</b> می‌توانید از منوی زردرنگ «ارجاع تسک به» کارشناس را انتخاب کنید و تسک را با صدا یا متن برای او ثبت کنید؛ همچنین در گفتار هم اگر نام کارشناس را بگویید (مثلاً «برای علی رضایی ...») خودکار به نام او ثبت می‌شود.
+    </div>
+
+    <div id="statusBox" class="status">
+      وضعیت: آماده شنیدن فرمان صوتی یا ثبت دستی...
+    </div>
+
+    <!-- فرم ثبت دستی -->
+    <div class="controls" style="background:#f8fafc; padding:10px; border-radius:10px; border:1px solid #e2e8f0;">
+      <input id="taskTitle" type="text" placeholder="عنوان کار خرید یا پیگیری بازرگانی..." style="flex:1; min-width:200px;" />
+      <select id="taskCat">
+        <option value="خرید داخلی">خرید داخلی</option>
+        <option value="خرید خارجی و واردات">خرید خارجی و واردات</option>
+        <option value="گمرک و ترخیص">گمرک و ترخیص</option>
+        <option value="مالی و ارزی">مالی و ارزی</option>
+      </select>
+      <div class="jalali-picker-inline" title="انتخاب تاریخ و ساعت شمسی آلارم">
+        <span style="font-size:12px; font-weight:bold; color:#334155;">آلارم شمسی:</span>
+        <select id="jDay"></select>
+        <select id="jMonth"></select>
+        <select id="jYear"></select>
+        <input id="jTime" type="time" value="" />
+      </div>
+      <button type="button" class="btn-add" id="addBtn">ثبت در جدول</button>
+    </div>
+
+    <!-- جدول تسک‌ها -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>شماره</th>
+            <th>کارشناس مسئول</th>
+            <th>ثبت / ارجاع توسط</th>
+            <th>شرح کار</th>
+            <th>بخش</th>
+            <th>تاریخ ثبت (شمسی)</th>
+            <th>آلارم (شمسی)</th>
+            <th>پیشرفت</th>
+            <th>وضعیت</th>
+            <th>عملیات</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. تقویم هجری شمسی (جلالی)
+    // =========================================================================
+    var JALALI_MONTHS = [
+      "فروردین", "اردیبهشت", "خرداد",
+      "تیر", "مرداد", "شهریور",
+      "مهر", "آبان", "آذر",
+      "دی", "بهمن", "اسفند"
+    ];
+
+    function gregorianToJalali(gy, gm, gd) {
+      var g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+      var gy2 = (gm > 2) ? (gy + 1) : gy;
+      var days = 355666 + (365 * gy) + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
+      var jy = -1595 + (33 * Math.floor(days / 12053));
+      days %= 12053;
+      jy += 4 * Math.floor(days / 1461);
+      days %= 1461;
+      if (days > 365) {
+        jy += Math.floor((days - 1) / 365);
+        days = (days - 1) % 365;
+      }
+      var jm = (days < 186) ? (1 + Math.floor(days / 31)) : (7 + Math.floor((days - 186) / 30));
+      var jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+      return { jy: jy, jm: jm, jd: jd };
+    }
+
+    function jalaliToGregorian(jy, jm, jd) {
+      jy += 1595;
+      var days = -355668 + (365 * jy) + (Math.floor(jy / 33) * 8) + Math.floor(((jy % 33) + 3) / 4) + jd + ((jm < 7) ? ((jm - 1) * 31) : (((jm - 7) * 30) + 186));
+      var gy = 400 * Math.floor(days / 146097);
+      days %= 146097;
+      if (days > 36524) {
+        gy += 100 * Math.floor(--days / 36524);
+        days %= 36524;
+        if (days >= 365) days++;
+      }
+      gy += 4 * Math.floor(days / 1461);
+      days %= 1461;
+      if (days > 365) {
+        gy += Math.floor((days - 1) / 365);
+        days = (days - 1) % 365;
+      }
+      var gd = days + 1;
+      var sal_a = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      var gm = 0;
+      for (gm = 1; gm <= 12 && gd > sal_a[gm]; gm++) {
+        gd -= sal_a[gm];
+      }
+      return { gy: gy, gm: gm, gd: gd };
+    }
+
+    function pad2(n) {
+      return n < 10 ? "0" + n : String(n);
+    }
+
+    function dateObjToIsoLocal(d) {
+      return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) +
+        "T" + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+    }
+
+    function formatIsoToJalaliText(isoStr) {
+      if (!isoStr) return "-";
+      var d = new Date(isoStr);
+      if (isNaN(d.getTime())) return isoStr;
+      var j = gregorianToJalali(d.getFullYear(), d.getMonth() + 1, d.getDate());
+      var mName = JALALI_MONTHS[j.jm - 1] || "";
+      return j.jd + " " + mName + " " + j.jy + " - ساعت " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+    }
+
+    function formatIsoToJalaliShortDate(isoStr) {
+      if (!isoStr) return "-";
+      var d = new Date(isoStr);
+      if (isNaN(d.getTime())) return "-";
+      var j = gregorianToJalali(d.getFullYear(), d.getMonth() + 1, d.getDate());
+      return j.jy + "/" + pad2(j.jm) + "/" + pad2(j.jd) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+    }
+
+    function getTodayJalali() {
+      var now = new Date();
+      return gregorianToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
+    }
+
+    function initJalaliFormPicker() {
+      var todayJ = getTodayJalali();
+      var badge = document.getElementById("todayJalaliBadge");
+      if (badge) {
+        badge.innerText = "امروز: " + todayJ.jd + " " + JALALI_MONTHS[todayJ.jm - 1] + " " + todayJ.jy;
+      }
+
+      var daySel = document.getElementById("jDay");
+      var monthSel = document.getElementById("jMonth");
+      var yearSel = document.getElementById("jYear");
+      if (!daySel || !monthSel || !yearSel) return;
+
+      var dHtml = "<option value=''>روز</option>";
+      for (var d = 1; d <= 31; d++) dHtml += "<option value='" + d + "'>" + d + "</option>";
+      daySel.innerHTML = dHtml;
+
+      var mHtml = "<option value=''>ماه</option>";
+      for (var m = 1; m <= 12; m++) mHtml += "<option value='" + m + "'>" + JALALI_MONTHS[m - 1] + "</option>";
+      monthSel.innerHTML = mHtml;
+
+      var yHtml = "";
+      for (var y = todayJ.jy; y <= todayJ.jy + 2; y++) yHtml += "<option value='" + y + "'>" + y + "</option>";
+      yearSel.innerHTML = yHtml;
+    }
+
+    function getJalaliPickerIso() {
+      var d = parseInt(document.getElementById("jDay").value, 10);
+      var m = parseInt(document.getElementById("jMonth").value, 10);
+      var y = parseInt(document.getElementById("jYear").value, 10);
+      var t = document.getElementById("jTime").value;
+      if (!d && !m && !t) return "";
+
+      var todayJ = getTodayJalali();
+      if (!y) y = todayJ.jy;
+      if (!m) m = todayJ.jm;
+      if (!d) d = todayJ.jd;
+
+      var g = jalaliToGregorian(y, m, d);
+      var hh = 9, mm = 0;
+      if (t && t.indexOf(":") > -1) {
+        var parts = t.split(":");
+        hh = parseInt(parts[0], 10) || 0;
+        mm = parseInt(parts[1], 10) || 0;
+      }
+      var dt = new Date(g.gy, g.gm - 1, g.gd, hh, mm, 0);
+      return dateObjToIsoLocal(dt);
+    }
+
+    // =========================================================================
+    // 2. پردازش گفتار فارسی و استخراج تاریخ شمسی و ساعت
+    // =========================================================================
+    function toEnglishDigits(text) {
+      var fa = "۰۱۲۳۴۵۶۷۸۹";
+      var ar = "٠١٢٣٤٥٦٧٨٩";
+      var out = text;
+      for (var i = 0; i < 10; i++) {
+        out = out.split(fa[i]).join(String(i));
+        out = out.split(ar[i]).join(String(i));
+      }
+
+      var tens = { "بیست": 20, "سی": 30, "چهل": 40, "پنجاه": 50, "شصت": 60, "هفتاد": 70, "هشتاد": 80, "نود": 90 };
+      var ones = {
+        "یکم": 1, "اول": 1, "یک": 1,
+        "دوم": 2, "دو": 2,
+        "سوم": 3, "سه": 3,
+        "چهارم": 4, "چهار": 4,
+        "پنجم": 5, "پنج": 5,
+        "ششم": 6, "شش": 6,
+        "هفتم": 7, "هفت": 7,
+        "هشتم": 8, "هشت": 8,
+        "نهم": 9, "نه": 9
+      };
+
+      for (var tWord in tens) {
+        for (var oWord in ones) {
+          var combo = tWord + " و " + oWord;
+          var val = String(tens[tWord] + ones[oWord]);
+          out = out.split(combo).join(val);
+        }
+      }
+
+      var singleWords = {
+        "یکم": "1", "اول": "1", "یک": "1",
+        "دوم": "2", "دو": "2",
+        "سوم": "3", "سه": "3",
+        "چهارم": "4", "چهار": "4",
+        "پنجم": "5", "پنج": "5",
+        "ششم": "6", "شش": "6",
+        "هفتم": "7", "هفت": "7",
+        "هشتم": "8", "هشت": "8",
+        "نهم": "9", "نه": "9",
+        "دهم": "10", "ده": "10",
+        "یازدهم": "11", "یازده": "11",
+        "دوازدهم": "12", "دوازده": "12",
+        "سیزدهم": "13", "سیزده": "13",
+        "چهاردهم": "14", "چهارده": "14",
+        "پانزدهم": "15", "پانزده": "15",
+        "شانزدهم": "16", "شانزده": "16",
+        "هفدهم": "17", "هفده": "17",
+        "هجدهم": "18", "هجده": "18",
+        "نوزدهم": "19", "نوزده": "19",
+        "بیستم": "20", "بیست": "20",
+        "سی‌ام": "30", "سی ام": "30", "سی": "30",
+        "چهل": "40", "پنجاه": "50", "شصت": "60",
+        "هفتاد": "70", "هشتاد": "80", "نود": "90", "صد": "100"
+      };
+
+      for (var w in singleWords) {
+        out = out.split(" " + w + " ").join(" " + singleWords[w] + " ");
+        if (out.indexOf(w + " ") === 0) out = singleWords[w] + out.slice(w.length);
+        if (out.lastIndexOf(" " + w) === out.length - w.length - 1) {
+          out = out.slice(0, out.length - w.length) + singleWords[w];
+        }
+      }
+      return out;
+    }
+
+    function extractAlarmFromSpeech(spoken) {
+      var norm = toEnglishDigits(spoken);
+      var now = new Date();
+      var todayJ = getTodayJalali();
+      var targetDate = new Date(now.getTime());
+      var hasDate = false;
+      var hasTime = false;
+      var cleanNorm = norm;
+
+      var monthMap = {
+        "فروردین": 1, "اردیبهشت": 2, "خرداد": 3,
+        "تیر": 4, "مرداد": 5, "شهریور": 6,
+        "مهر": 7, "آبان": 8, "آذر": 9,
+        "دی": 10, "بهمن": 11, "اسفند": 12
+      };
+
+      var jalaliDateRegex = /(?:روز\s*)?(\d{1,2})\s*(?:ام|م)?\s*(فروردین|اردیبهشت|خرداد|تیر|مرداد|شهریور|مهر|آبان|آذر|دی|بهمن|اسفند)(?:\s*(?:ماه))?(?:\s*(?:سال\s*)?(14\d{2}))?/;
+      var jMatch = cleanNorm.match(jalaliDateRegex);
+
+      if (jMatch) {
+        var jDay = Math.min(31, Math.max(1, parseInt(jMatch[1], 10)));
+        var jMonth = monthMap[jMatch[2]];
+        var jYear = jMatch[3] ? parseInt(jMatch[3], 10) : todayJ.jy;
+
+        if (!jMatch[3]) {
+          if (jMonth < todayJ.jm || (jMonth === todayJ.jm && jDay < todayJ.jd)) {
+            jYear = todayJ.jy + 1;
+          }
+        }
+
+        var gConv = jalaliToGregorian(jYear, jMonth, jDay);
+        targetDate = new Date(gConv.gy, gConv.gm - 1, gConv.gd, 9, 0, 0);
+        hasDate = true;
+        cleanNorm = cleanNorm.replace(jMatch[0], " ");
+      } else {
+        var daysLaterMatch = cleanNorm.match(/(\d+)\s*(?:روز|روزه)\s*(?:دیگه|دیگر|بعد|آینده)/);
+        if (daysLaterMatch) {
+          var daysAdd = parseInt(daysLaterMatch[1], 10) || 0;
+          targetDate.setDate(now.getDate() + daysAdd);
+          hasDate = true;
+          cleanNorm = cleanNorm.replace(daysLaterMatch[0], " ");
+        } else if (cleanNorm.indexOf("پس فردا") > -1 || cleanNorm.indexOf("پس‌فردا") > -1) {
+          targetDate.setDate(now.getDate() + 2);
+          hasDate = true;
+          cleanNorm = cleanNorm.replace(/پس‌?فردا/g, " ");
+        } else if (cleanNorm.indexOf("فردا") > -1) {
+          targetDate.setDate(now.getDate() + 1);
+          hasDate = true;
+          cleanNorm = cleanNorm.replace(/فردا/g, " ");
+        } else if (cleanNorm.indexOf("امروز") > -1) {
+          hasDate = true;
+          cleanNorm = cleanNorm.replace(/امروز/g, " ");
+        }
+      }
+
+      var hour = 9;
+      var minute = 0;
+      var timeMatch = cleanNorm.match(/ساعت\s*(\d{1,2})(?:\s*(?:و|:)\s*(نیم|ربع|45|30|15|\d{1,2}))?/);
+      if (timeMatch) {
+        hour = parseInt(timeMatch[1], 10);
+        hasTime = true;
+        var minPart = timeMatch[2] || "";
+        if (minPart === "نیم" || minPart === "30") minute = 30;
+        else if (minPart === "ربع" || minPart === "15") minute = 15;
+        else if (minPart === "45") minute = 45;
+        else if (/^\d+$/.test(minPart)) minute = Math.min(59, parseInt(minPart, 10));
+
+        if ((cleanNorm.indexOf("عصر") > -1 || cleanNorm.indexOf("بعدازظهر") > -1 || cleanNorm.indexOf("بعد از ظهر") > -1 || cleanNorm.indexOf("شب") > -1) && hour < 12) {
+          hour += 12;
+        }
+        if (hour > 23) hour = 23;
+        cleanNorm = cleanNorm.replace(timeMatch[0], " ");
+      }
+
+      var finalTitle = cleanNorm
+        .replace(/عصر|بعدازظهر|بعد از ظهر|صبح|شب/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if (!finalTitle) finalTitle = spoken.trim();
+
+      var alarmIso = "";
+      if (hasDate || hasTime) {
+        if (!hasDate && hasTime) {
+          var cand = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0);
+          if (cand <= now) cand.setDate(cand.getDate() + 1);
+          targetDate = cand;
+        } else {
+          targetDate.setHours(hour, minute, 0, 0);
+        }
+        alarmIso = dateObjToIsoLocal(targetDate);
+      }
+
+      return {
+        title: finalTitle,
+        alarm: alarmIso
+      };
+    }
+
+    // =========================================================================
+    // 3. مدیریت حساب‌های کاربری، ورود و دسترسی‌های مدیر بازرگانی و کارشناس خرید
+    // =========================================================================
+    var currentUser = null;
+    var usersList = [];
+    var tasks = [];
+    var nextNumber = 1;
+    var isSyncing = false;
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function setStatus(msg) {
+      var el = document.getElementById("statusBox");
+      if (el) el.innerText = "وضعیت: " + msg;
+    }
+
+    function isManager() {
+      return currentUser && currentUser.role === "مدیر بازرگانی";
+    }
+
+    function checkSavedSession() {
+      try {
+        var raw = localStorage.getItem("biz_logged_user_v7");
+        if (raw) {
+          currentUser = JSON.parse(raw);
+          enterApp();
+        }
+      } catch (e) {}
+    }
+
+    function doLogin() {
+      var uEl = document.getElementById("loginUsername");
+      var pEl = document.getElementById("loginPassword");
+      var errEl = document.getElementById("loginError");
+      var username = uEl.value.trim();
+      var password = pEl.value.trim();
+
+      if (!username || !password) {
+        errEl.innerText = "لطفاً نام کاربری و رمز عبور را وارد کنید.";
+        return;
+      }
+
+      errEl.innerText = "در حال بررسی...";
+      fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username, password: password })
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data && data.ok && data.user) {
+            currentUser = data.user;
+            try { localStorage.setItem("biz_logged_user_v7", JSON.stringify(currentUser)); } catch (e) {}
+            errEl.innerText = "";
+            enterApp();
+          } else {
+            errEl.innerText = (data && data.error) ? data.error : "نام کاربری یا رمز عبور نادرست است.";
+          }
+        })
+        .catch(function () {
+          errEl.innerText = "خطا در ارتباط با سرور کامپیوتر.";
+        });
+    }
+
+    function doLogout() {
+      currentUser = null;
+      try { localStorage.removeItem("biz_logged_user_v7"); } catch (e) {}
+      document.getElementById("appView").classList.add("hidden");
+      document.getElementById("loginView").classList.remove("hidden");
+      document.getElementById("loginPassword").value = "";
+    }
+
+    function enterApp() {
+      document.getElementById("loginView").classList.add("hidden");
+      document.getElementById("appView").classList.remove("hidden");
+
+      document.getElementById("currentUserNameBadge").innerText = currentUser.name;
+      document.getElementById("currentUserRoleBadge").innerText = currentUser.role;
+
+      if (isManager()) {
+        document.getElementById("toggleUsersBtn").classList.remove("hidden");
+        document.getElementById("assignSelectWrapper").classList.remove("hidden");
+      } else {
+        document.getElementById("toggleUsersBtn").classList.add("hidden");
+        document.getElementById("adminUsersPanel").classList.add("hidden");
+        document.getElementById("assignSelectWrapper").classList.add("hidden");
+      }
+
+      initJalaliFormPicker();
+      syncFromServer();
+    }
+
+    function refreshUserDropdowns() {
+      // 1. منوی ارجاع تسک (برای مدیر بازرگانی)
+      var assignSel = document.getElementById("assignToSelect");
+      if (assignSel) {
+        var prevAssign = assignSel.value;
+        var aHtml = "";
+        for (var i = 0; i < usersList.length; i++) {
+          var u = usersList[i];
+          var label = u.name + " (" + u.role + ")";
+          aHtml += "<option value='" + escapeHtml(u.username) + "'>" + escapeHtml(label) + "</option>";
+        }
+        assignSel.innerHTML = aHtml;
+        if (prevAssign) assignSel.value = prevAssign;
+        if (!assignSel.value && currentUser) assignSel.value = currentUser.username;
+      }
+
+      // 2. منوی فیلتر جدول
+      var filterSel = document.getElementById("filterExpert");
+      if (filterSel) {
+        var prevFilter = filterSel.value || "ALL";
+        var fHtml = "<option value='ALL'>همه کارشناسان</option>";
+        for (var j = 0; j < usersList.length; j++) {
+          var u2 = usersList[j];
+          fHtml += "<option value='" + escapeHtml(u2.username) + "'>" + escapeHtml(u2.name) + " (" + escapeHtml(u2.role) + ")</option>";
+        }
+        filterSel.innerHTML = fHtml;
+        filterSel.value = prevFilter;
+        if (filterSel.value !== prevFilter) filterSel.value = "ALL";
+      }
+
+      // 3. جدول کاربران در پنل مدیریت
+      var uTbody = document.getElementById("usersTableBody");
+      if (uTbody) {
+        var rows = "";
+        for (var k = 0; k < usersList.length; k++) {
+          var usr = usersList[k];
+          rows += "<tr>";
+          rows += "<td><b>" + escapeHtml(usr.name) + "</b></td>";
+          rows += "<td>" + escapeHtml(usr.role) + "</td>";
+          rows += "<td><code>" + escapeHtml(usr.username) + "</code></td>";
+          rows += "<td><code>" + escapeHtml(usr.password) + "</code></td>";
+          rows += "<td>";
+          if (usr.username !== currentUser.username) {
+            rows += "<button type='button' class='btn-del' onclick='deleteUserAccount(\"" + escapeHtml(usr.username) + "\")'>حذف کاربر</button>";
+          } else {
+            rows += "<span style='color:#64748b; font-size:12px;'>حساب فعلی شما</span>";
+          }
+          rows += "</td>";
+          rows += "</tr>";
+        }
+        uTbody.innerHTML = rows;
+      }
+    }
+
+    function createUserAccount() {
+      if (!isManager()) return;
+      var fullName = document.getElementById("newFullName").value.trim();
+      var role = document.getElementById("newUserRole").value;
+      var username = document.getElementById("newUsername").value.trim();
+      var password = document.getElementById("newPassword").value.trim();
+
+      if (!fullName || !username || !password) {
+        setStatus("لطفاً نام کارشناس، نام کاربری و رمز عبور را کامل وارد کنید.");
+        return;
+      }
+
+      for (var i = 0; i < usersList.length; i++) {
+        if (usersList[i].username === username) {
+          setStatus("این نام کاربری قبلاً ثبت شده است. نام کاربری دیگری انتخاب کنید.");
+          return;
+        }
+      }
+
+      usersList.push({
+        username: username,
+        password: password,
+        name: fullName,
+        role: role
+      });
+
+      saveUsersToServer(function () {
+        document.getElementById("newFullName").value = "";
+        document.getElementById("newUsername").value = "";
+        document.getElementById("newPassword").value = "";
+        setStatus("حساب کاربری «" + fullName + "» با نام کاربری " + username + " ساخته شد.");
+      });
+    }
+
+    function deleteUserAccount(uname) {
+      if (!isManager()) return;
+      var updated = [];
+      for (var i = 0; i < usersList.length; i++) {
+        if (usersList[i].username !== uname) updated.push(usersList[i]);
+      }
+      usersList = updated;
+      saveUsersToServer(function () {
+        setStatus("حساب کاربری حذف شد.");
+      });
+    }
+
+    function saveUsersToServer(cb) {
+      refreshUserDropdowns();
+      fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ users: usersList })
+      })
+        .then(function () { if (cb) cb(); })
+        .catch(function () {});
+    }
+
+    // =========================================================================
+    // 4. همگام‌سازی تسک‌ها و تشخیص ارجاع صوتی مدیر بازرگانی
+    // =========================================================================
+    function syncFromServer() {
+      if (!currentUser || isSyncing) return;
+      isSyncing = true;
+      fetch("/api/state")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data) {
+            if (Array.isArray(data.users)) {
+              usersList = data.users;
+              refreshUserDropdowns();
+            }
+            if (Array.isArray(data.tasks)) {
+              tasks = data.tasks;
+              nextNumber = data.nextNumber || 1;
+              renderTable();
+            }
+          }
+          isSyncing = false;
+        })
+        .catch(function () { isSyncing = false; });
+    }
+
+    function saveTasksToServer() {
+      renderTable();
+      fetch("/api/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tasks: tasks, nextNumber: nextNumber })
+      }).catch(function () {});
+    }
+
+    function playBeep() {
+      try {
+        var AudioCtx = window.AudioContext || window.webkitAudioContext;
+        var ctx = new AudioCtx();
+        var osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = 800;
+        osc.connect(ctx.destination);
+        osc.start();
+        setTimeout(function () { osc.stop(); ctx.close(); }, 600);
+      } catch (e) {}
+    }
+
+    function getTargetAssignee(spokenText) {
+      // اگر کارشناس خرید وارد شده باشد، تسک همیشه برای خودش ثبت می‌شود
+      if (!isManager()) {
+        return {
+          username: currentUser.username,
+          name: currentUser.name,
+          cleanedTitle: spokenText
+        };
+      }
+
+      // اگر مدیر بازرگانی وارد شده باشد: ابتدا بررسی می‌کنیم آیا نام کارشناسی در صحبت ذکر شده یا نه
+      var cleaned = spokenText || "";
+      if (spokenText) {
+        for (var i = 0; i < usersList.length; i++) {
+          var u = usersList[i];
+          if (u.username === currentUser.username) continue;
+          if (cleaned.indexOf(u.name) > -1) {
+            cleaned = cleaned.replace("برای " + u.name, "").replace("به " + u.name, "").replace(u.name, "").trim();
+            var assignSel = document.getElementById("assignToSelect");
+            if (assignSel) assignSel.value = u.username;
+            return {
+              username: u.username,
+              name: u.name,
+              cleanedTitle: cleaned || spokenText
+            };
+          }
+        }
+      }
+
+      // در غیر این صورت از منوی کشویی "ارجاع تسک به" استفاده می‌کند
+      var sel = document.getElementById("assignToSelect");
+      var chosenUsername = sel ? sel.value : currentUser.username;
+      var chosenName = currentUser.name;
+      for (var j = 0; j < usersList.length; j++) {
+        if (usersList[j].username === chosenUsername) {
+          chosenName = usersList[j].name;
+          break;
+        }
+      }
+      return {
+        username: chosenUsername,
+        name: chosenName,
+        cleanedTitle: cleaned
+      };
+    }
+
+    function addTask(title, category, alarmIso, targetUsername, targetName) {
+      if (!title || !title.trim()) return;
+      tasks.unshift({
+        id: nextNumber++,
+        assigneeUsername: targetUsername || currentUser.username,
+        assigneeName: targetName || currentUser.name,
+        createdByUsername: currentUser.username,
+        createdByName: currentUser.name,
+        createdByRole: currentUser.role,
+        title: title.trim(),
+        category: category || "خرید داخلی",
+        createdAt: dateObjToIsoLocal(new Date()),
+        alarm: alarmIso || "",
+        progress: 0,
+        done: false,
+        alerted: false
+      });
+      saveTasksToServer();
+    }
+
+    function addFromForm() {
+      var titleEl = document.getElementById("taskTitle");
+      var catEl = document.getElementById("taskCat");
+      if (!titleEl.value.trim()) {
+        setStatus("لطفاً ابتدا عنوان کار را بنویسید.");
+        titleEl.focus();
+        return;
+      }
+      var target = getTargetAssignee("");
+      var alarmIso = getJalaliPickerIso();
+      addTask(titleEl.value, catEl.value, alarmIso, target.username, target.name);
+
+      var alarmMsg = alarmIso ? (" | آلارم شمسی: " + formatIsoToJalaliText(alarmIso)) : "";
+      setStatus("تسک برای «" + target.name + "» ثبت شد" + alarmMsg);
+      titleEl.value = "";
+      document.getElementById("jDay").value = "";
+      document.getElementById("jMonth").value = "";
+      document.getElementById("jTime").value = "";
+    }
+
+    function handleSpokenText(spoken) {
+      var norm = toEnglishDigits(spoken.trim());
+
+      var doneMatch = norm.match(/(مورد|شماره|تسک)\s*(\d+)\s*(حل شد|انجام شد|تمام شد|تموم شد)/);
+      if (doneMatch) {
+        var idDone = parseInt(doneMatch[2], 10);
+        for (var i = 0; i < tasks.length; i++) {
+          if (tasks[i].id === idDone) {
+            tasks[i].done = true;
+            tasks[i].progress = 100;
+            saveTasksToServer();
+            setStatus("مورد #" + idDone + " حل شد و سبز شد.");
+            return;
+          }
+        }
+        setStatus("مورد #" + idDone + " پیدا نشد.");
+        return;
+      }
+
+      var pctMatch = norm.match(/(مورد|شماره|تسک)\s*(\d+).*?(\d+)\s*درصد/);
+      if (pctMatch) {
+        var idPct = parseInt(pctMatch[2], 10);
+        var valPct = Math.min(100, Math.max(0, parseInt(pctMatch[3], 10)));
+        for (var j = 0; j < tasks.length; j++) {
+          if (tasks[j].id === idPct) {
+            tasks[j].progress = valPct;
+            tasks[j].done = (valPct === 100);
+            saveTasksToServer();
+            setStatus("پیشرفت مورد #" + idPct + " شد " + valPct + " درصد.");
+            return;
+          }
+        }
+      }
+
+      var cat = "خرید داخلی";
+      if (spoken.indexOf("گمرک") > -1 || spoken.indexOf("ترخیص") > -1 || spoken.indexOf("کانتینر") > -1 || spoken.indexOf("بارنامه") > -1) {
+        cat = "گمرک و ترخیص";
+      } else if (spoken.indexOf("واردات") > -1 || spoken.indexOf("پروفرما") > -1 || spoken.indexOf("خارجی") > -1) {
+        cat = "خرید خارجی و واردات";
+      } else if (spoken.indexOf("مالی") > -1 || spoken.indexOf("پرداخت") > -1 || spoken.indexOf("ارز") > -1 || spoken.indexOf("حواله") > -1) {
+        cat = "مالی و ارزی";
+      }
+
+      var target = getTargetAssignee(spoken);
+      var parsed = extractAlarmFromSpeech(target.cleanedTitle);
+      addTask(parsed.title, cat, parsed.alarm, target.username, target.name);
+
+      if (parsed.alarm) {
+        setStatus("ثبت شد برای «" + target.name + "»: «" + parsed.title + "» | آلارم شمسی: " + formatIsoToJalaliText(parsed.alarm));
+      } else {
+        setStatus("ثبت شد برای «" + target.name + "»: «" + parsed.title + "»");
+      }
+    }
+
+    var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var rec = null;
+    var listening = false;
+
+    if (SpeechRec) {
+      rec = new SpeechRec();
+      rec.lang = "fa-IR";
+      rec.interimResults = false;
+
+      rec.onstart = function () {
+        listening = true;
+        var btn = document.getElementById("micBtn");
+        btn.className = "btn-mic active";
+        btn.innerText = "🎙️ در حال گوش دادن... صحبت کنید";
+        setStatus("میکروفون روشن است (" + currentUser.name + ")...");
+      };
+
+      rec.onresult = function (e) {
+        var text = e.results[0][0].transcript;
+        handleSpokenText(text);
+      };
+
+      rec.onerror = function (e) {
+        var msg = "خطای میکروفون: " + e.error;
+        if (e.error === "not-allowed") {
+          msg = "دسترسی میکروفون مسدود است! در گوشی یا مرورگر، آدرس را با https باز کنید و Microphone را Allow کنید.";
+        } else if (e.error === "network") {
+          msg = "خطای شبکه در تشخیص گفتار (اتصال اینترنت را بررسی کنید).";
+        }
+        setStatus(msg);
+      };
+
+      rec.onend = function () {
+        listening = false;
+        var btn = document.getElementById("micBtn");
+        btn.className = "btn-mic";
+        btn.innerText = "🎤 شروع فرمان صوتی (فارسی)";
+      };
+    }
+
+    function toggleMic() {
+      if (!rec) {
+        setStatus("تشخیص گفتار در این مرورگر فعال نیست. با Chrome (اندروید/کامپیوتر) یا Safari (آیفون) باز کنید.");
+        return;
+      }
+      if (listening) rec.stop();
+      else {
+        try { rec.start(); } catch (err) { setStatus("خطا: " + err.message); }
+      }
+    }
+
+    function setDone(id) {
+      for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) {
+          tasks[i].done = true;
+          tasks[i].progress = 100;
+        }
+      }
+      saveTasksToServer();
+    }
+
+    function setProgress(id, val) {
+      var p = parseInt(val, 10) || 0;
+      for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) {
+          tasks[i].progress = p;
+          tasks[i].done = (p === 100);
+        }
+      }
+      saveTasksToServer();
+    }
+
+    function clearAlarm(id) {
+      for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) {
+          tasks[i].alarm = "";
+          tasks[i].alerted = false;
+        }
+      }
+      saveTasksToServer();
+    }
+
+    function deleteTask(id) {
+      var updated = [];
+      for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id !== id) updated.push(tasks[i]);
+      }
+      tasks = updated;
+      saveTasksToServer();
+    }
+
+    function renderTable() {
+      var tbody = document.getElementById("tableBody");
+      var filterEl = document.getElementById("filterExpert");
+      var selectedFilter = filterEl ? filterEl.value : "ALL";
+      var now = new Date();
+      var html = "";
+
+      for (var i = 0; i < tasks.length; i++) {
+        var t = tasks[i];
+        var assigneeUser = t.assigneeUsername || "";
+        var assigneeName = t.assigneeName || "نامشخص";
+        var creatorName = t.createdByName || assigneeName;
+        var creatorRole = t.createdByRole || "";
+
+        // فیلتر نمایش برای کارشناس خرید: تسک‌های خودش + تسک‌هایی که مدیر بازرگانی ثبت کرده را ببیند
+        if (!isManager()) {
+          var isMine = (assigneeUser === currentUser.username || t.createdByUsername === currentUser.username);
+          var isFromManager = (creatorRole === "مدیر بازرگانی");
+          if (!isMine && !isFromManager) continue;
+        }
+
+        if (selectedFilter !== "ALL" && assigneeUser !== selectedFilter) continue;
+
+        var overdue = (!t.done && t.alarm && new Date(t.alarm) < now);
+        var rowClass = "";
+        if (t.done) rowClass = "done-row";
+        else if (overdue) rowClass = "overdue-row";
+
+        var statusText = "در جریان";
+        if (t.done) statusText = "حل شده";
+        else if (overdue) statusText = "عقب افتاده";
+
+        var creatorHtml = escapeHtml(creatorName);
+        if (creatorRole === "مدیر بازرگانی" && assigneeUser !== t.createdByUsername) {
+          creatorHtml += "<br/><span class='manager-tag'>ارجاع مدیر بازرگانی</span>";
+        }
+
+        var jalaliAlarmDisplay = t.alarm
+          ? "<span class='jalali-pill'>" + escapeHtml(formatIsoToJalaliText(t.alarm)) + "</span> <button type='button' style='background:none;color:#dc2626;padding:2px 5px;font-size:11px;' onclick='clearAlarm(" + t.id + ")' title='حذف آلارم'>✖</button>"
+          : "<span style='color:#94a3b8; font-size:12px;'>بدون آلارم</span>";
+
+        html += "<tr class='" + rowClass + "'>";
+        html += "<td><b>#" + t.id + "</b></td>";
+        html += "<td><span class='expert-tag'>" + escapeHtml(assigneeName) + "</span></td>";
+        html += "<td>" + creatorHtml + "</td>";
+        html += "<td>" + escapeHtml(t.title) + "</td>";
+        html += "<td>" + escapeHtml(t.category) + "</td>";
+        html += "<td><span style='font-size:12px; color:#475569;'>" + escapeHtml(formatIsoToJalaliShortDate(t.createdAt)) + "</span></td>";
+        html += "<td>" + jalaliAlarmDisplay + "</td>";
+        html += "<td><input type='range' min='0' max='100' step='10' value='" + t.progress + "' oninput='setProgress(" + t.id + ", this.value)' /> <b>" + t.progress + "%</b></td>";
+        html += "<td><b>" + statusText + "</b></td>";
+        html += "<td>";
+        if (!t.done) {
+          html += "<button type='button' class='btn-done' onclick='setDone(" + t.id + ")'>حل شد</button> ";
+        }
+        if (isManager() || t.createdByUsername === currentUser.username) {
+          html += "<button type='button' class='btn-del' onclick='deleteTask(" + t.id + ")'>حذف</button>";
+        }
+        html += "</td>";
+        html += "</tr>";
+      }
+
+      tbody.innerHTML = html;
+    }
+
+    function exportCSV() {
+      var nl = String.fromCharCode(10);
+      var header = "\uFEFFشماره,کارشناس مسئول,ثبت توسط,شرح کار,بخش,تاریخ ثبت شمسی,زمان آلارم شمسی,پیشرفت,وضعیت" + nl;
+      var rows = [];
+      for (var i = 0; i < tasks.length; i++) {
+        var t = tasks[i];
+        var st = t.done ? "حل شده" : "در جریان";
+        var safeTitle = String(t.title).split('"').join('""');
+        var safeAssignee = String(t.assigneeName || "نامشخص").split('"').join('""');
+        var safeCreator = String(t.createdByName || "نامشخص").split('"').join('""');
+        var jCreated = formatIsoToJalaliShortDate(t.createdAt);
+        var jAlarm = t.alarm ? formatIsoToJalaliText(t.alarm) : "-";
+        rows.push(t.id + ',"' + safeAssignee + '","' + safeCreator + '","' + safeTitle + '",' + t.category + ',"' + jCreated + '","' + jAlarm + '",' + t.progress + '%,' + st);
+      }
+      var csv = header + rows.join(nl);
+      var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "commerce-daily-tasks-v8.csv";
+      a.click();
+    }
+
+    document.getElementById("loginBtn").addEventListener("click", doLogin);
+    document.getElementById("loginPassword").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") doLogin();
+    });
+    document.getElementById("logoutBtn").addEventListener("click", doLogout);
+
+    document.getElementById("toggleUsersBtn").addEventListener("click", function () {
+      var panel = document.getElementById("adminUsersPanel");
+      panel.classList.toggle("hidden");
+    });
+    document.getElementById("createUserBtn").addEventListener("click", createUserAccount);
+
+    document.getElementById("filterExpert").addEventListener("change", renderTable);
+    document.getElementById("micBtn").addEventListener("click", toggleMic);
+    document.getElementById("addBtn").addEventListener("click", addFromForm);
+    document.getElementById("exportBtn").addEventListener("click", exportCSV);
+    document.getElementById("alarmTestBtn").addEventListener("click", function () {
+      playBeep();
+      setStatus("صدای آلارم تست شد.");
+    });
+    document.getElementById("taskTitle").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") addFromForm();
+    });
+
+    setInterval(function () {
+      if (!currentUser) return;
+      var now = new Date();
+      var changed = false;
+      for (var i = 0; i < tasks.length; i++) {
+        var t = tasks[i];
+        var isRelevant = isManager() || (t.assigneeUsername === currentUser.username);
+        if (isRelevant && !t.done && t.alarm && !t.alerted && new Date(t.alarm) <= now) {
+          t.alerted = true;
+          changed = true;
+          playBeep();
+          alert("یادآور مورد #" + t.id + " (" + (t.assigneeName || "") + "):" + String.fromCharCode(10) + t.title + String.fromCharCode(10) + formatIsoToJalaliText(t.alarm));
+        }
+      }
+      if (changed) saveTasksToServer();
+    }, 15000);
+
+    setInterval(syncFromServer, 4000);
+
+    checkSavedSession();
+  </script>
+</body>
+</html>
