@@ -1,6 +1,17 @@
 services:
   - type: web
-    name: commerce-daily-task
+    name: commerce-daily-task-demo
     env: python
-    buildCommand: "pip install openpyxl"
+    plan: starter
+    buildCommand: pip install -r requirements.txt
     startCommand: python app.py
+    healthCheckPath: /healthz
+    disk:
+      name: daily-task-demo-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /var/data
+      - key: INITIAL_ADMIN_PASSWORD
+        sync: false

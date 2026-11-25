@@ -1,0 +1,4 @@
+Version: 19.0 Management Demo
+Base: DailyTask v18.1
+Target: Render demonstration deployment
+Data: Use synthetic/demo data only

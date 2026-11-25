@@ -9,6 +9,14 @@ import io
 import ssl
 import subprocess
 import threading
+import sqlite3
+import secrets
+import hashlib
+import hmac
+import time
+import http.cookies
+import shutil
+from contextlib import closing
 
 try:
     import openpyxl
@@ -24,8 +32,22 @@ PORT = int(os.environ.get("PORT", 8000))
 HTTPS_PORT = int(os.environ.get("HTTPS_PORT", 8443))
 IS_CLOUD = bool(os.environ.get("RENDER") or os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("DYNO"))
 
-DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-DB_FILE = os.path.join(DIRECTORY, "tasks_db.json")
+import sys
+if getattr(sys, "frozen", False):
+    DIRECTORY = os.path.dirname(os.path.abspath(sys.executable))
+else:
+    DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+# On Render, durable data must live under the attached persistent disk mount.
+# Locally, keep the existing v18 folder layout unchanged.
+DATA_DIR = os.environ.get("DATA_DIR", DIRECTORY)
+os.makedirs(DATA_DIR, exist_ok=True)
+DB_FILE = os.path.join(DATA_DIR, "tasks_db.sqlite3")
+LEGACY_DB_FILE = os.path.join(DATA_DIR, "tasks_db_clean.json")
+BACKUP_DIR = os.path.join(DATA_DIR, "backups")
+SESSION_TTL_SECONDS = 12 * 60 * 60
+SESSIONS = {}
+SESSION_LOCK = threading.Lock()
+PBKDF2_ITERATIONS = 310000
 CERT_FILE = os.path.join(DIRECTORY, "cert.pem")
 KEY_FILE = os.path.join(DIRECTORY, "key.pem")
 DB_LOCK = threading.Lock()
@@ -33,7 +55,8 @@ DB_LOCK = threading.Lock()
 DEPARTMENTS = [
     "کارشناس تولیدی",
     "کارشناس غیر تولیدی",
-    "کارشناس امور قراردادها"
+    "امور قراردادها",
+    "کلیه کارشناس ها"
 ]
 
 CATEGORIES = [
@@ -60,10 +83,17 @@ STATUSES = [
     "تکمیل شده"
 ]
 
+# Local test login remains admin/123 for compatibility. Cloud deployments
+# must provide a private initial password through the INITIAL_ADMIN_PASSWORD
+# environment variable before the first database is created.
+INITIAL_ADMIN_PASSWORD = os.environ.get("INITIAL_ADMIN_PASSWORD", "123")
+if IS_CLOUD and len(INITIAL_ADMIN_PASSWORD) < 12:
+    raise RuntimeError("Set INITIAL_ADMIN_PASSWORD to a unique password of at least 12 characters in the hosting environment.")
+
 DEFAULT_USERS = [
     {
         "username": "admin",
-        "password": "123",
+        "password": INITIAL_ADMIN_PASSWORD,
         "name": "مدیر بازرگانی",
         "role": "مدیر بازرگانی",
         "department": "مدیریت بازرگانی"
@@ -71,105 +101,6 @@ DEFAULT_USERS = [
 ]
 
 SEED_TASKS = []
-
-SEED_TASKS = [
-    {
-        "id": 1,
-        "category": "پیگیری",
-        "title": "انعقاد قرارداد پارچه تدبیر تکس کوتد و انکوتد",
-        "department": "کارشناس تولیدی",
-        "priority": "متوسط",
-        "status": "تکمیل شده",
-        "assigneeUsername": "mansouri",
-        "assigneeName": "منصوری",
-        "month": "تیر",
-        "startDate": "1405/02/08",
-        "endDate": "1405/02/15",
-        "completionDate": "1405/02/20",
-        "progress": 100,
-        "alarm": "",
-        "result": "تعیین تکلیف نهایی",
-        "nextAction": "-",
-        "notes": "عدم انعقاد قرارداد",
-        "createdByUsername": "admin",
-        "createdByName": "مدیر بازرگانی",
-        "createdByRole": "مدیر بازرگانی",
-        "done": True,
-        "alerted": False
-    },
-    {
-        "id": 2,
-        "category": "فعالیت اجرایی",
-        "title": "خرید نخ داخلی از شرکت شمیم - نمونه اولیه - تیراژ انبوه",
-        "department": "کارشناس تولیدی",
-        "priority": "بالا",
-        "status": "تکمیل شده",
-        "assigneeUsername": "tafaghodi",
-        "assigneeName": "تفقدی",
-        "month": "تیر",
-        "startDate": "1405/04/20",
-        "endDate": "1405/05/04",
-        "completionDate": "1405/05/10",
-        "progress": 100,
-        "alarm": "",
-        "result": "تامین انجام شد",
-        "nextAction": "تحویل به انبار",
-        "notes": "",
-        "createdByUsername": "admin",
-        "createdByName": "مدیر بازرگانی",
-        "createdByRole": "مدیر بازرگانی",
-        "done": True,
-        "alerted": False
-    },
-    {
-        "id": 3,
-        "category": "اهداف و برنامه‌ها",
-        "title": "تمدید بازه قراردادهای باز سال جدید",
-        "department": "امور قراردادها",
-        "priority": "متوسط",
-        "status": "تکمیل شده",
-        "assigneeUsername": "jamali",
-        "assigneeName": "جمالی",
-        "month": "تیر",
-        "startDate": "1405/05/01",
-        "endDate": "1405/05/08",
-        "completionDate": "1405/05/08",
-        "progress": 100,
-        "alarm": "",
-        "result": "الحاقیه تمدید امضا شد",
-        "nextAction": "ارسال به مالی",
-        "notes": "",
-        "createdByUsername": "admin",
-        "createdByName": "مدیر بازرگانی",
-        "createdByRole": "مدیر بازرگانی",
-        "done": True,
-        "alerted": False
-    },
-    {
-        "id": 4,
-        "category": "اهداف عملیاتی",
-        "title": "نحوه تسویه و تعیین تکلیف ضایعات فلزی پیمانکاران پرس کاری (لیست قیمت جدید - اجرای پایلوت - صورتجلسه)",
-        "department": "کارشناس غیر تولیدی",
-        "priority": "بحرانی",
-        "status": "در حال انجام",
-        "assigneeUsername": "niroomand",
-        "assigneeName": "نیرومند",
-        "month": "مرداد",
-        "startDate": "1405/05/10",
-        "endDate": "1405/05/29",
-        "completionDate": "",
-        "progress": 50,
-        "alarm": "",
-        "result": "در حال استعلام نرخ ضایعات",
-        "nextAction": "برگزاری جلسه نهایی با پیمانکار",
-        "notes": "اولویت ویژه مدیریت",
-        "createdByUsername": "admin",
-        "createdByName": "مدیر بازرگانی",
-        "createdByRole": "مدیر بازرگانی",
-        "done": False,
-        "alerted": False
-    }
-]
 
 def get_local_ip():
     try:
@@ -184,8 +115,6 @@ def get_local_ip():
 def map_legacy_category(cat):
     if not cat:
         return "فعالیت اجرایی"
-    if cat == "امور قراردادها":
-        return "کارشناس امور قراردادها"
     if cat in CATEGORIES:
         return cat
     if "پیگیری" in cat:
@@ -227,44 +156,328 @@ def normalize_task(t):
         "createdByUsername": t.get("createdByUsername") or "",
         "createdByName": t.get("createdByName") or "",
         "createdByRole": t.get("createdByRole") or "",
+        # Preserve manager referral marker across database save/load cycles.
+        "referredByManager": bool(t.get("referredByManager", False)),
         "done": done,
-        "alerted": bool(t.get("alerted", False))
+        "alerted": bool(t.get("alerted", False)),
+        "updatedAt": int(t.get("updatedAt", 0) or 0)
     }
 
-def load_db():
-    with DB_LOCK:
-        if not os.path.exists(DB_FILE):
-            initial = {
-                "tasks": SEED_TASKS,
-                "nextNumber": len(SEED_TASKS) + 1,
-                "users": DEFAULT_USERS
-            }
-            with open(DB_FILE, "w", encoding="utf-8") as f:
-                json.dump(initial, f, ensure_ascii=False, indent=2)
-            return initial
-        try:
-            with open(DB_FILE, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                if isinstance(data, dict):
-                    users = data.get("users")
-                    if not isinstance(users, list) or len(users) == 0:
-                        users = DEFAULT_USERS
-                    tasks = [normalize_task(x) for x in data.get("tasks", [])]
-                    max_id = max([x["id"] for x in tasks], default=0)
-                    next_num = max(int(data.get("nextNumber", 1)), max_id + 1)
-                    return {
-                        "tasks": tasks,
-                        "nextNumber": next_num,
-                        "users": users
-                    }
-        except Exception:
-            pass
-        return {"tasks": SEED_TASKS, "nextNumber": 1, "users": DEFAULT_USERS}
+def db_connect():
+    conn = sqlite3.connect(DB_FILE, timeout=30, isolation_level=None)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys=ON")
+    conn.execute("PRAGMA busy_timeout=30000")
+    return conn
 
-def save_db(data):
-    with DB_LOCK:
-        with open(DB_FILE, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+def hash_password(password):
+    salt = secrets.token_bytes(16)
+    digest = hashlib.pbkdf2_hmac("sha256", str(password).encode("utf-8"), salt, PBKDF2_ITERATIONS)
+    return "pbkdf2_sha256${}${}${}".format(PBKDF2_ITERATIONS, salt.hex(), digest.hex())
+
+def verify_password(password, stored):
+    if not stored:
+        return False
+    if not str(stored).startswith("pbkdf2_sha256$"):
+        return hmac.compare_digest(str(password), str(stored))
+    try:
+        _, iterations, salt_hex, digest_hex = str(stored).split("$", 3)
+        actual = hashlib.pbkdf2_hmac("sha256", str(password).encode("utf-8"), bytes.fromhex(salt_hex), int(iterations)).hex()
+        return hmac.compare_digest(actual, digest_hex)
+    except Exception:
+        return False
+
+def public_user(profile):
+    item = dict(profile or {})
+    item.pop("password_hash", None)
+    item["password"] = ""
+    return item
+
+def init_database():
+    os.makedirs(BACKUP_DIR, exist_ok=True)
+    with closing(db_connect()) as conn:
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("""CREATE TABLE IF NOT EXISTS users (
+            username TEXT PRIMARY KEY,
+            profile_json TEXT NOT NULL,
+            password_hash TEXT NOT NULL
+        )""")
+        conn.execute("""CREATE TABLE IF NOT EXISTS tasks (
+            id INTEGER PRIMARY KEY,
+            payload_json TEXT NOT NULL,
+            assignee_username TEXT NOT NULL DEFAULT '',
+            created_by_username TEXT NOT NULL DEFAULT '',
+            department TEXT NOT NULL DEFAULT ''
+        )""")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_tasks_assignee ON tasks(assignee_username)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_tasks_creator ON tasks(created_by_username)")
+        conn.execute("CREATE TABLE IF NOT EXISTS task_tombstones (task_id INTEGER PRIMARY KEY, deleted_at INTEGER NOT NULL, deleted_by TEXT NOT NULL DEFAULT '')")
+        conn.execute("CREATE TABLE IF NOT EXISTS app_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)")
+        user_count = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+        if user_count == 0:
+            legacy = None
+            if os.path.exists(LEGACY_DB_FILE):
+                try:
+                    with open(LEGACY_DB_FILE, "r", encoding="utf-8") as f:
+                        legacy = json.load(f)
+                    backup_path = LEGACY_DB_FILE + ".pre_sqlite_backup"
+                    if not os.path.exists(backup_path):
+                        shutil.copy2(LEGACY_DB_FILE, backup_path)
+                except Exception:
+                    legacy = None
+            users = legacy.get("users", []) if isinstance(legacy, dict) else []
+            if not isinstance(users, list) or not users:
+                users = DEFAULT_USERS
+            for user in users:
+                profile = dict(user)
+                username = str(profile.get("username", "")).strip()
+                password = str(profile.pop("password", "123"))
+                if not username:
+                    continue
+                conn.execute("INSERT OR REPLACE INTO users(username, profile_json, password_hash) VALUES(?,?,?)",
+                             (username, json.dumps(profile, ensure_ascii=False), hash_password(password)))
+            tasks = legacy.get("tasks", []) if isinstance(legacy, dict) else []
+            for task in tasks:
+                normalized = normalize_task(task)
+                conn.execute("INSERT OR REPLACE INTO tasks(id,payload_json,assignee_username,created_by_username,department) VALUES(?,?,?,?,?)",
+                    (normalized["id"], json.dumps(normalized, ensure_ascii=False), normalized.get("assigneeUsername", ""), normalized.get("createdByUsername", ""), normalized.get("department", "")))
+            next_num = legacy.get("nextNumber", 1) if isinstance(legacy, dict) else 1
+            conn.execute("INSERT OR REPLACE INTO app_meta(key,value) VALUES('nextNumber',?)", (str(max(int(next_num or 1), 1)),))
+        if conn.execute("SELECT 1 FROM app_meta WHERE key='nextNumber'").fetchone() is None:
+            max_id = conn.execute("SELECT COALESCE(MAX(id),0) FROM tasks").fetchone()[0]
+            conn.execute("INSERT INTO app_meta(key,value) VALUES('nextNumber',?)", (str(max_id + 1),))
+
+def load_db():
+    init_database_if_needed()
+    with closing(db_connect()) as conn:
+        tasks = [json.loads(row[0]) for row in conn.execute("SELECT payload_json FROM tasks ORDER BY id")]
+        users = []
+        for row in conn.execute("SELECT profile_json FROM users ORDER BY username"):
+            users.append(public_user(json.loads(row[0])))
+        meta = conn.execute("SELECT value FROM app_meta WHERE key='nextNumber'").fetchone()
+        next_num = int(meta[0]) if meta else (max([t.get("id", 0) for t in tasks], default=0) + 1)
+        return {"tasks": tasks, "nextNumber": next_num, "users": users}
+
+_DB_INITIALIZED = False
+_DB_INIT_LOCK = threading.Lock()
+def init_database_if_needed():
+    global _DB_INITIALIZED
+    if _DB_INITIALIZED:
+        return
+    with _DB_INIT_LOCK:
+        if not _DB_INITIALIZED:
+            init_database()
+            _DB_INITIALIZED = True
+
+def save_users_from_payload(users):
+    if not isinstance(users, list) or not users:
+        raise ValueError("لیست کاربران نامعتبر است.")
+    with closing(db_connect()) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        incoming_names = set()
+        for raw_user in users:
+            profile = dict(raw_user)
+            username = str(profile.get("username", "")).strip()
+            if not username:
+                continue
+            incoming_names.add(username)
+            new_password = str(profile.pop("password", "") or "")
+            existing = conn.execute("SELECT password_hash FROM users WHERE username=?", (username,)).fetchone()
+            if existing:
+                pwd_hash = hash_password(new_password) if new_password else existing[0]
+            else:
+                if not new_password:
+                    raise ValueError("برای کاربر جدید تعیین رمز عبور الزامی است.")
+                pwd_hash = hash_password(new_password)
+            conn.execute("INSERT OR REPLACE INTO users(username,profile_json,password_hash) VALUES(?,?,?)",
+                         (username, json.dumps(profile, ensure_ascii=False), pwd_hash))
+        if not incoming_names:
+            raise ValueError("حداقل یک کاربر باید باقی بماند.")
+        existing_names = {r[0] for r in conn.execute("SELECT username FROM users")}
+        for removed in existing_names - incoming_names:
+            conn.execute("DELETE FROM users WHERE username=?", (removed,))
+        conn.execute("COMMIT")
+
+def get_user_record(username):
+    with closing(db_connect()) as conn:
+        row = conn.execute("SELECT profile_json,password_hash FROM users WHERE username=?", (username,)).fetchone()
+        if not row:
+            return None
+        return json.loads(row[0]), row[1]
+
+def set_user_password(username, password):
+    with closing(db_connect()) as conn:
+        cur = conn.execute("UPDATE users SET password_hash=? WHERE username=?", (hash_password(password), username))
+        return cur.rowcount > 0
+
+def create_session(username):
+    token = secrets.token_urlsafe(32)
+    with SESSION_LOCK:
+        SESSIONS[token] = {"username": username, "expires": time.time() + SESSION_TTL_SECONDS}
+    return token
+
+def session_username(handler):
+    cookie = http.cookies.SimpleCookie()
+    try:
+        cookie.load(handler.headers.get("Cookie", ""))
+        morsel = cookie.get("session")
+        token = morsel.value if morsel else ""
+    except Exception:
+        token = ""
+    if not token:
+        return None
+    with SESSION_LOCK:
+        record = SESSIONS.get(token)
+        if not record:
+            return None
+        if record["expires"] < time.time():
+            SESSIONS.pop(token, None)
+            return None
+        record["expires"] = time.time() + SESSION_TTL_SECONDS
+        return record["username"]
+
+def current_user(handler):
+    username = session_username(handler)
+    if not username:
+        return None
+    record = get_user_record(username)
+    if not record:
+        return None
+    return public_user(record[0])
+
+def is_manager_user(user):
+    return bool(user and user.get("role") == "مدیر بازرگانی")
+
+def task_visible_to_user(task, user):
+    """Experts see only tasks assigned to them (legacy self-created unassigned tasks included)."""
+    if is_manager_user(user):
+        return True
+    username = user.get("username", "")
+    return (task.get("assigneeUsername") == username or
+            (not task.get("assigneeUsername") and task.get("createdByUsername") == username))
+
+def save_tasks_for_user(incoming, next_number, user, deleted_ids=None):
+    if not isinstance(incoming, list):
+        raise ValueError("فهرست تسک‌ها نامعتبر است.")
+    manager = is_manager_user(user)
+    username = user.get("username", "")
+    id_map = {}
+    with closing(db_connect()) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        all_rows = conn.execute("SELECT id,payload_json FROM tasks").fetchall()
+        old_by_id = {r[0]: json.loads(r[1]) for r in all_rows}
+        max_id = max(old_by_id.keys(), default=0)
+        for raw in incoming:
+            task = normalize_task(raw)
+            requested_id = task["id"]
+            old = old_by_id.get(requested_id)
+            tombstone = conn.execute("SELECT deleted_at FROM task_tombstones WHERE task_id=?", (requested_id,)).fetchone()
+            incoming_stamp = int(task.get("updatedAt", 0) or 0)
+            if tombstone and incoming_stamp <= int(tombstone[0] or 0):
+                continue
+            if tombstone and incoming_stamp > int(tombstone[0] or 0):
+                conn.execute("DELETE FROM task_tombstones WHERE task_id=?", (requested_id,))
+            if not manager:
+                if old and not task_visible_to_user(old, user):
+                    # A stale copy of a task reassigned by the manager must never
+                    # recreate it or modify it. Only a genuinely new local task
+                    # (created by this user) may receive a replacement global ID.
+                    if task.get("createdByUsername") == username and old.get("createdByUsername") != username:
+                        max_id += 1
+                        task["id"] = max_id
+                        id_map[str(requested_id)] = max_id
+                        old = None
+                    else:
+                        continue
+                if old:
+                    task["assigneeUsername"] = old.get("assigneeUsername") or username
+                    task["assigneeName"] = old.get("assigneeName") or user.get("name", "")
+                    task["createdByUsername"] = old.get("createdByUsername") or username
+                    task["createdByName"] = old.get("createdByName") or user.get("name", "")
+                    task["createdByRole"] = old.get("createdByRole", "")
+                    task["referredByManager"] = old.get("referredByManager", False)
+                else:
+                    task["assigneeUsername"] = username
+                    task["assigneeName"] = user.get("name", "")
+                    task["createdByUsername"] = username
+                    task["createdByName"] = user.get("name", "")
+                    task["createdByRole"] = user.get("role", "")
+                    task["referredByManager"] = False
+            # Last-write-wins by per-task update timestamp. A timestamp is only
+            # compared for the same task; stale offline copies cannot overwrite newer data.
+            if old:
+                try:
+                    incoming_stamp = int(task.get("updatedAt", 0) or 0)
+                    server_stamp = int(old.get("updatedAt", 0) or 0)
+                except Exception:
+                    incoming_stamp, server_stamp = 0, 0
+                if incoming_stamp < server_stamp:
+                    continue
+            conn.execute("INSERT OR REPLACE INTO tasks(id,payload_json,assignee_username,created_by_username,department) VALUES(?,?,?,?,?)",
+                (task["id"], json.dumps(task, ensure_ascii=False), task.get("assigneeUsername", ""), task.get("createdByUsername", ""), task.get("department", "")))
+            old_by_id[task["id"]] = task
+
+        # Explicit deletions are restricted to the manager or the task creator.
+        for raw_delete in (deleted_ids or []):
+            try:
+                if isinstance(raw_delete, dict):
+                    task_id = int(raw_delete.get("id"))
+                    deleted_at = int(raw_delete.get("deletedAt", 0) or 0)
+                else:
+                    task_id = int(raw_delete)
+                    deleted_at = int(time.time() * 1000)
+            except Exception:
+                continue
+            old = old_by_id.get(task_id)
+            if not old:
+                continue
+            if manager or old.get("createdByUsername") == username:
+                if deleted_at >= int(old.get("updatedAt", 0) or 0):
+                    conn.execute("DELETE FROM tasks WHERE id=?", (task_id,))
+                    conn.execute("INSERT OR REPLACE INTO task_tombstones(task_id,deleted_at,deleted_by) VALUES(?,?,?)", (task_id, deleted_at, username))
+
+        max_id = conn.execute("SELECT COALESCE(MAX(id),0) FROM tasks").fetchone()[0]
+        final_next = max(int(next_number or 1), max_id + 1)
+        conn.execute("INSERT OR REPLACE INTO app_meta(key,value) VALUES('nextNumber',?)", (str(final_next),))
+        conn.execute("COMMIT")
+    return {"idMap": id_map, "nextNumber": final_next}
+
+def get_visible_state(user):
+    db = load_db()
+    db["tasks"] = [t for t in db["tasks"] if task_visible_to_user(t, user)]
+    if not is_manager_user(user):
+        db["users"] = [u for u in db["users"] if u.get("username") == user.get("username")]
+    return db
+
+def backup_database():
+    init_database_if_needed()
+    os.makedirs(BACKUP_DIR, exist_ok=True)
+    stamp = time.strftime("%Y%m%d_%H%M%S")
+    destination = os.path.join(BACKUP_DIR, "tasks_db_{}.sqlite3".format(stamp))
+    with closing(db_connect()) as source:
+        with closing(sqlite3.connect(destination)) as target:
+            source.backup(target)
+    # Keep the latest 30 daily snapshots; avoid unbounded disk growth.
+    files = sorted([os.path.join(BACKUP_DIR, f) for f in os.listdir(BACKUP_DIR) if f.endswith(".sqlite3")], key=os.path.getmtime, reverse=True)
+    for old_path in files[30:]:
+        try:
+            os.remove(old_path)
+        except OSError:
+            pass
+    return destination
+
+def backup_scheduler():
+    last_day = None
+    while True:
+        today = time.strftime("%Y%m%d")
+        if today != last_day:
+            try:
+                backup_database()
+                last_day = today
+                print("نسخه پشتیبان روزانه دیتابیس ایجاد شد.")
+            except Exception as exc:
+                print("خطا در تهیه نسخه پشتیبان:", exc)
+        time.sleep(300)
 
 def ensure_self_signed_cert(local_ip):
     if os.path.exists(CERT_FILE) and os.path.exists(KEY_FILE):
@@ -491,81 +704,169 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def end_headers(self):
         self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Referrer-Policy", "same-origin")
         super().end_headers()
 
-    def send_json(self, code, obj):
+    def send_json(self, code, obj, extra_headers=None):
         payload = json.dumps(obj, ensure_ascii=False).encode("utf-8")
         self.send_response(code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(payload)))
+        for name, value in (extra_headers or []):
+            self.send_header(name, value)
         self.end_headers()
         self.wfile.write(payload)
 
+    def read_json_body(self):
+        length = min(int(self.headers.get("Content-Length", 0)), 5_000_000)
+        raw = self.rfile.read(length).decode("utf-8")
+        return json.loads(raw) if raw else {}
+
+    def origin_is_same(self):
+        origin = self.headers.get("Origin")
+        if not origin:
+            return True
+        from urllib.parse import urlparse
+        try:
+            return urlparse(origin).netloc.lower() == self.headers.get("Host", "").lower()
+        except Exception:
+            return False
+
+    def require_user(self):
+        user = current_user(self)
+        if not user:
+            self.send_json(401, {"ok": False, "error": "نشست شما معتبر نیست؛ لطفاً دوباره وارد شوید."})
+            return None
+        return user
+
     def do_GET(self):
+        if self.path == "/healthz":
+            self.send_json(200, {"ok": True, "service": "daily-task"})
+            return
         if self.path == "/" or self.path == "":
             self.path = "/index.html"
-        if self.path.startswith("/api/state"):
-            data = load_db()
-            self.send_json(200, data)
+        if self.path == "/api/auth/me":
+            user = current_user(self)
+            if user:
+                self.send_json(200, {"ok": True, "user": user})
+            else:
+                self.send_json(401, {"ok": False})
             return
-        if self.path.startswith("/api/export.xlsx"):
-            db = load_db()
-            xlsx_bytes = build_corporate_xlsx(db.get("tasks", []), db.get("users", []))
-            if not xlsx_bytes:
-                self.send_json(501, {"ok": False, "error": "کتابخانه openpyxl نصب نیست."})
+        if self.path.startswith("/api/"):
+            user = self.require_user()
+            if not user:
                 return
-            self.send_response(200)
-            self.send_header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-            self.send_header("Content-Disposition", 'attachment; filename="IKS-DailyTask-Tracking.xlsx"')
-            self.send_header("Content-Length", str(len(xlsx_bytes)))
-            self.end_headers()
-            self.wfile.write(xlsx_bytes)
+            if self.path.startswith("/api/state"):
+                self.send_json(200, get_visible_state(user))
+                return
+            if self.path.startswith("/api/export.xlsx"):
+                db = get_visible_state(user)
+                xlsx_bytes = build_corporate_xlsx(db.get("tasks", []), db.get("users", []))
+                if not xlsx_bytes:
+                    self.send_json(501, {"ok": False, "error": "کتابخانه openpyxl نصب نیست."})
+                    return
+                self.send_response(200)
+                self.send_header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                self.send_header("Content-Disposition", 'attachment; filename="IKS-DailyTask-Tracking.xlsx"')
+                self.send_header("Content-Length", str(len(xlsx_bytes)))
+                self.end_headers()
+                self.wfile.write(xlsx_bytes)
+                return
+            self.send_json(404, {"ok": False, "error": "مسیر پیدا نشد."})
             return
-        super().do_GET()
+        from urllib.parse import urlsplit, unquote
+        static_path = unquote(urlsplit(self.path).path).lstrip("/")
+        allowed_static = {"index.html", "logo-imen.jpg", "icon.svg", "manifest.json", "service-worker.js"}
+        if static_path in allowed_static:
+            self.path = "/" + static_path
+            super().do_GET()
+        else:
+            self.send_error(404, "Not Found")
 
     def do_POST(self):
-        length = int(self.headers.get("Content-Length", 0))
-        raw = self.rfile.read(length).decode("utf-8")
+        if not self.origin_is_same():
+            self.send_json(403, {"ok": False, "error": "درخواست با مبدأ نامعتبر رد شد."})
+            return
         try:
-            body = json.loads(raw) if raw else {}
+            body = self.read_json_body()
         except Exception as e:
-            self.send_json(400, {"ok": False, "error": str(e)})
+            self.send_json(400, {"ok": False, "error": "بدنه درخواست نامعتبر است: " + str(e)})
             return
 
-        if self.path.startswith("/api/login"):
+        if self.path == "/api/login":
             uname = str(body.get("username", "")).strip()
-            pwd = str(body.get("password", "")).strip()
-            db = load_db()
-            users = db.get("users") if isinstance(db.get("users"), list) and len(db.get("users")) > 0 else DEFAULT_USERS
-            for u in users:
-                if str(u.get("username", "")).strip() == uname and str(u.get("password", "")).strip() == pwd:
-                    self.send_json(200, {"ok": True, "user": u})
-                    return
+            pwd = str(body.get("password", ""))
+            record = get_user_record(uname)
+            if record and verify_password(pwd, record[1]):
+                # Upgrade legacy password hashes after a successful login.
+                if not str(record[1]).startswith("pbkdf2_sha256$"):
+                    set_user_password(uname, pwd)
+                token = create_session(uname)
+                forwarded_proto = str(self.headers.get("X-Forwarded-Proto", "")).lower()
+                secure = "; Secure" if (isinstance(self.connection, ssl.SSLSocket) or forwarded_proto == "https") else ""
+                cookie = "session={}; HttpOnly; SameSite=Lax; Path=/; Max-Age={}{}".format(token, SESSION_TTL_SECONDS, secure)
+                self.send_json(200, {"ok": True, "user": public_user(record[0])}, [("Set-Cookie", cookie)])
+                return
             self.send_json(401, {"ok": False, "error": "نام کاربری یا رمز عبور اشتباه است."})
             return
 
-        if self.path.startswith("/api/users"):
-            db = load_db()
-            users = body.get("users")
-            if isinstance(users, list) and len(users) > 0:
-                db["users"] = users
-                save_db(db)
-                self.send_json(200, {"ok": True, "users": db["users"]})
-            else:
-                self.send_json(400, {"ok": False, "error": "لیست کاربران نامعتبر است."})
+        if self.path == "/api/logout":
+            cookie = http.cookies.SimpleCookie()
+            cookie.load(self.headers.get("Cookie", ""))
+            morsel = cookie.get("session")
+            if morsel:
+                with SESSION_LOCK:
+                    SESSIONS.pop(morsel.value, None)
+            self.send_json(200, {"ok": True}, [("Set-Cookie", "session=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0")])
             return
 
-        if self.path.startswith("/api/tasks"):
-            db = load_db()
-            incoming = body.get("tasks", db.get("tasks", []))
-            db["tasks"] = [normalize_task(x) for x in incoming]
-            db["nextNumber"] = body.get("nextNumber", db.get("nextNumber", 1))
-            save_db(db)
+        user = self.require_user()
+        if not user:
+            return
+
+        if self.path == "/api/change-password":
+            old_password = str(body.get("currentPassword", ""))
+            new_password = str(body.get("newPassword", ""))
+            if len(new_password) < 8:
+                self.send_json(400, {"ok": False, "error": "رمز جدید باید حداقل ۸ نویسه داشته باشد."})
+                return
+            record = get_user_record(user["username"])
+            if not record or not verify_password(old_password, record[1]):
+                self.send_json(400, {"ok": False, "error": "رمز عبور فعلی صحیح نیست."})
+                return
+            set_user_password(user["username"], new_password)
             self.send_json(200, {"ok": True})
             return
 
-        self.send_response(404)
-        self.end_headers()
+        if self.path == "/api/users":
+            if not is_manager_user(user):
+                self.send_json(403, {"ok": False, "error": "فقط مدیر بازرگانی به مدیریت کاربران دسترسی دارد."})
+                return
+            try:
+                incoming_users = body.get("users")
+                if not isinstance(incoming_users, list) or not any(str(x.get("username", "")) == user.get("username") for x in incoming_users if isinstance(x, dict)):
+                    self.send_json(400, {"ok": False, "error": "حساب مدیر واردشده نمی‌تواند از فهرست کاربران حذف شود."})
+                    return
+                save_users_from_payload(incoming_users)
+                db = load_db()
+                self.send_json(200, {"ok": True, "users": db["users"]})
+            except Exception as e:
+                self.send_json(400, {"ok": False, "error": str(e)})
+            return
+
+        if self.path == "/api/tasks":
+            try:
+                result = save_tasks_for_user(body.get("tasks", []), body.get("nextNumber", 1), user, body.get("deletedIds", []))
+                state = get_visible_state(user)
+                self.send_json(200, {"ok": True, **result, "tasks": state.get("tasks", []), "users": state.get("users", [])})
+            except Exception as e:
+                self.send_json(400, {"ok": False, "error": str(e)})
+            return
+
+        self.send_json(404, {"ok": False, "error": "مسیر پیدا نشد."})
+
 
 class ReusableTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     allow_reuse_address = True
@@ -573,7 +874,8 @@ class ReusableTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 def main():
     os.chdir(DIRECTORY)
-    load_db()
+    init_database_if_needed()
+    threading.Thread(target=backup_scheduler, daemon=True).start()
 
     if IS_CLOUD:
         print(f"Cloud server running on port {PORT}...")
@@ -587,12 +889,11 @@ def main():
     has_https = ensure_self_signed_cert(local_ip)
 
     print("=" * 74)
-    print("  برنامه دیلی تسک صوتی بازرگانی (نسخه نهایی - جامع ۱۶ ستونی + آلارم + داشبورد) فعال شد!")
+    print("  سامانه دیلی‌تسک بازرگانی - نسخه نمایشی ۱۹ (مبنای ۱۸.۱) فعال شد!")
     print(f"  1) آدرس در کامپیوتر: {pc_url}")
     if has_https:
         print(f"  2) آدرس امن در گوشی (روی همان Wi-Fi): {phone_https}")
-    print("  حساب مدیر بازرگانی -> یوزر: admin | پسورد: 123")
-    print("  نمونه کارشناسان -> mansouri / tafaghodi / jamali / niroomand | پسورد: 123")
+    print("  اطلاعات قبلی در صورت وجود به‌صورت خودکار به SQLite منتقل می‌شود.")
     print("=" * 74)
 
     webbrowser.open(pc_url)

@@ -2,6 +2,9 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#1e3a8a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -9,7 +12,7 @@
   <meta name="apple-mobile-web-app-title" content="دیلی تسک ۱۰" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon.svg" />
-  <title>دیلی تسک صوتی بازرگانی (نسخه ۱۰ - ۱۶ ستونی + آلارم)</title>
+  <title>سامانه دیلی‌تسک بازرگانی | شرکت ایمن خودرو شرق</title>
   <style>
     * { box-sizing: border-box; font-family: Tahoma, Arial, sans-serif; }
     body {
@@ -423,7 +426,7 @@
       .btn-mic-start, .btn-mic-stop { width: 100%; text-align: center; }
     }
   
-    /* طراحی صفحه ورود الهام‌گرفته از درگاه شرکت ایمن خودرو شرق */
+    /* استایل صفحه ورود الهام‌گرفته از درگاه شرکت ایمن خودرو شرق */
     .login-shell {
       max-width: 980px;
       margin: 28px auto;
@@ -540,6 +543,7 @@
       font-size: 11px;
       cursor: pointer;
     }
+    .pass-toggle-btn:hover { background: #e2e8f0; }
     .login-submit-btn {
       width: 100%;
       padding: 12px 16px;
@@ -562,14 +566,53 @@
       text-align: center;
     }
     .header-company-logo {
-      height: 46px;
-      width: auto;
-      max-width: 160px;
+      height: 76px;
+      width: 250px;
+      max-width: min(38vw, 250px);
       object-fit: contain;
       background: #ffffff;
       border: 1px solid #cbd5e1;
       border-radius: 10px;
       padding: 4px 8px;
+    }
+    .jalali-alarm-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      direction: ltr;
+    }
+    .jalali-alarm-row input[type="text"] {
+      flex: 1.4;
+      min-width: 105px;
+      direction: ltr;
+      text-align: center;
+    }
+    .jalali-alarm-row input[type="time"] {
+      flex: 1;
+      min-width: 82px;
+      direction: ltr;
+      text-align: center;
+    }
+    .report-subgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .mini-report-table {
+      width: 100%;
+      min-width: 0;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .mini-report-table th {
+      position: static;
+      background: #0f766e;
+      color: #fff;
+      padding: 6px 8px;
+    }
+    .mini-report-table td {
+      padding: 6px 8px;
     }
     .modal-backdrop {
       position: fixed;
@@ -598,7 +641,123 @@
         padding: 22px 18px;
       }
     }
-</style>
+
+    .jcal-btn {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      border-radius: 7px;
+      padding: 6px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .jcal-btn:hover { background: #bae6fd; }
+    .jcal-popup {
+      position: fixed;
+      z-index: 2000;
+      background: #ffffff;
+      border: 1.5px solid #0284c7;
+      border-radius: 12px;
+      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.22);
+      padding: 12px;
+      width: 270px;
+      direction: rtl;
+    }
+    .jcal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 4px;
+    }
+    .jcal-head select {
+      padding: 4px 6px;
+      font-size: 12px;
+    }
+    .jcal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+    .jcal-dow {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      padding-bottom: 3px;
+    }
+    .jcal-day {
+      padding: 5px 0;
+      font-size: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    .jcal-day:hover { background: #dbeafe; border-color: #3b82f6; }
+    .jcal-day.today { background: #0f766e; color: #fff; font-weight: 700; border-color: #0f766e; }
+
+    /* اصلاح ظاهر داشبورد تحلیلی */
+    .dashboard-panel {
+      background: #f8fafc;
+      border: 1px solid #dbe3ee;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+    }
+    .kpi-card {
+      border-radius: 12px;
+      padding: 16px;
+      min-height: 88px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+    .kpi-val { font-size: 25px; font-weight: 800; line-height: 1.2; }
+    .chart-box {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 15px;
+      min-width: 0;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, .035);
+    }
+    .chart-title {
+      color: #1e3a8a;
+      font-weight: 800;
+      font-size: 13px;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #eef2f7;
+    }
+    .bar-label-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: #334155;
+      margin-bottom: 5px;
+    }
+    .mini-report-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .mini-report-table th, .mini-report-table td {
+      padding: 9px 8px;
+      border-bottom: 1px solid #edf2f7;
+      text-align: center;
+    }
+    .mini-report-table th { background: #f1f5f9; color: #334155; }
+    @media (max-width: 640px) {
+      .charts-grid, .report-subgrid { grid-template-columns: 1fr; }
+      .dashboard-panel { padding: 12px; }
+      .chart-box { padding: 12px; }
+    }
+
+  </style>
 </head>
 <body>
 
@@ -607,7 +766,7 @@
     <div class="login-brand-side">
       <div>
         <div class="login-brand-top">
-          <img src="data:image/png;base64,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" alt="شرکت ایمن خودرو شرق" class="login-brand-logo" />
+          <img src="data:image/png;base64,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" alt="شرکت ایمن خودرو شرق" class="login-brand-logo" />
           <div>
             <div style="font-size:12.5px; font-weight:700; color:#99f6e4;">شرکت ایمن خودرو شرق (سهامی عام)</div>
             <div style="font-size:11.5px; color:#cbd5e1;">سامانه مدیریت و پیگیری اقدامات بازرگانی</div>
@@ -615,19 +774,19 @@
         </div>
         <h2 class="login-brand-title">مدیریت هوشمند اقدامات<br/>در یک نگاه</h2>
         <p class="login-brand-desc">
-          ثبت صوتی و دستی اقدامات، پایش روند پیشرفت کارشناسان تولیدی، غیر تولیدی و امور قراردادها، تنظیم آلارم یادآور و خروجی اکسل شرکتی در یک محیط یکپارچه.
+          ثبت صوتی و دستی اقدامات، پایش روند پیشرفت کارشناسان تولیدی، غیر تولیدی و امور قراردادها، آلارم شمسی یادآور و خروجی اکسل شرکتی در یک سامانه یکپارچه.
         </p>
         <div class="login-feature-pills">
           <div class="login-pill-item">
-            <span>کارشناس تولیدی، غیر تولیدی و امور قراردادها</span>
+            <span>کارشناس تولیدی، غیر تولیدی، امور قراردادها و همه کارشناسان</span>
             <span>●</span>
           </div>
           <div class="login-pill-item">
-            <span>ثبت صوتی سریع و داشبورد تحلیلی</span>
+            <span>ثبت و ویرایش صوتی پیشرفته و داشبورد تحلیلی</span>
             <span>●</span>
           </div>
           <div class="login-pill-item">
-            <span>خروجی اکسل شرکتی ۱۶ ستونی</span>
+            <span>تقویم شمسی کامل و خروجی اکسل شرکتی ۱۶ ستونی</span>
             <span>●</span>
           </div>
         </div>
@@ -669,13 +828,14 @@
   <!-- بخش ۲: برنامه اصلی -->
   <div id="appView" class="box hidden">
     <div class="header">
-      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px;">
-        <img src="data:image/png;base64,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" alt="لوگو شرکت ایمن خودرو شرق" class="header-company-logo" />
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; direction:rtl;">
+        <img src="logo-imen.jpg" alt="لوگو شرکت ایمن خودرو شرق" class="header-company-logo" />
         <h1>دیلی تسک صوتی بازرگانی — شرکت ایمن خودرو شرق</h1>
         <span id="todayJalaliBadge" class="today-badge">امروز: ...</span>
       </div>
       <div style="display:flex; gap:7px; flex-wrap:wrap;">
         <button type="button" class="btn-dash" id="toggleDashBtn">📊 داشبورد تحلیلی</button>
+        <button type="button" class="btn-edit" id="toggleGuideBtn">📘 راهنما</button>
         <button type="button" class="btn-purple hidden" id="toggleUsersBtn">👥 مدیریت کارشناسان</button>
         <button type="button" class="btn-export" id="exportXlsxBtn">📥 خروجی اکسل شرکتی (.xlsx)</button>
         <button type="button" class="btn-add" id="alarmTestBtn">🔔 تست زنگ آلارم</button>
@@ -703,7 +863,8 @@
           <option value="ALL">همه دپارتمان‌ها</option>
           <option value="کارشناس تولیدی">کارشناس تولیدی</option>
           <option value="کارشناس غیر تولیدی">کارشناس غیر تولیدی</option>
-          <option value="کارشناس امور قراردادها">کارشناس امور قراردادها</option>
+          <option value="امور قراردادها">امور قراردادها</option>
+          <option value="کلیه کارشناس ها">کلیه کارشناس ها</option>
         </select>
 
         <label for="filterStatus" style="font-size:12.5px;"><b>وضعیت:</b></label>
@@ -726,8 +887,113 @@
         <h3 style="margin:0; font-size:16px; color:#1e3a8a;">📊 داشبورد تحلیلی و نمودارهای اقدامات بازرگانی</h3>
         <button type="button" class="btn-cancel" onclick="document.getElementById('dashboardPanel').classList.add('hidden')">بستن داشبورد ✖</button>
       </div>
+      <div class="dashboard-filter-row" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding:10px 12px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;">
+        <label for="dashboardMonthFilter" style="font-weight:700;color:#334155;">فیلتر گزارش ماهانه:</label>
+        <select id="dashboardMonthFilter" style="min-width:150px;padding:8px;border:1px solid #cbd5e1;border-radius:8px;">
+          <option value="ALL">همه ماه‌ها</option>
+        </select>
+        <span style="font-size:12px;color:#64748b;">با انتخاب هر ماه، تمام شاخص‌ها و نمودارهای داشبورد بر اساس همان ماه به‌روزرسانی می‌شوند.</span>
+      </div>
       <div id="kpiGrid" class="kpi-grid"></div>
       <div id="chartsGrid" class="charts-grid"></div>
+      <div id="extraReportsGrid" class="report-subgrid"></div>
+    </div>
+
+    <div id="guidePanel" class="dashboard-panel hidden" style="background:#fff;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;color:#1e3a8a;">📘 راهنمای جامع سامانه دیلی تسک بازرگانی</h3>
+        <button type="button" class="btn-cancel" onclick="document.getElementById('guidePanel').classList.add('hidden')">بستن ✖</button>
+      </div>
+      <div class="guide-content" style="line-height:2;font-size:13px;color:#334155;">
+        <h4>راهنمای ثبت و مدیریت اقدامات</h4>
+        <p>برای ثبت دستی، فرم «ثبت دستی تسک جدید» را تکمیل و دکمه «ثبت در جدول» را انتخاب کنید. برای ثبت صوتی، ضبط را شروع کنید، فرمان را بیان کنید و پس از توقف، پیش‌نویس را بررسی و تأیید کنید. ویرایش صوتی با شماره ردیف یا نام/شماره ستون انجام می‌شود.</p>
+        <h4>تعریف ۱۶ ستون جدول</h4>
+        <ol>
+          <li><b>شماره:</b> شناسه یکتای خودکار هر اقدام؛ برای ارجاع و ویرایش صوتی استفاده می‌شود.</li>
+          <li><b>دسته‌بندی:</b> فعالیت اجرایی، پیگیری، اهداف عملیاتی، اهداف و برنامه‌ها یا تسک.</li>
+          <li><b>شرح اقدام:</b> عنوان روشن و قابل پیگیری کاری که باید انجام شود.</li>
+          <li><b>دپارتمان:</b> کارشناس تولیدی، کارشناس غیر تولیدی، کارشناس امور قراردادها یا کلیه کارشناسان.</li>
+          <li><b>اولویت:</b> بحرانی، بالا، متوسط یا پایین؛ میزان فوریت و اهمیت اقدام.</li>
+          <li><b>وضعیت:</b> شروع نشده، در حال انجام، در انتظار تایید، متوقف شده، لغو شده یا تکمیل شده.</li>
+          <li><b>مسئول:</b> کارشناس یا فردی که انجام اقدام به او واگذار شده است.</li>
+          <li><b>ماه:</b> ماهی که اقدام در گزارش‌های ماهانه ذیل آن دسته‌بندی می‌شود.</li>
+          <li><b>تاریخ شروع:</b> تاریخ آغاز اقدام به تقویم شمسی.</li>
+          <li><b>تاریخ پایان:</b> مهلت یا موعد نهایی انجام اقدام.</li>
+          <li><b>تاریخ تکمیل:</b> تاریخ واقعی اتمام اقدام؛ در زمان تکمیل قابل ثبت است.</li>
+          <li><b>درصد پیشرفت:</b> میزان پیشرفت اقدام از صفر تا صد درصد.</li>
+          <li><b>آلارم:</b> تاریخ و ساعت یادآوری برای پیگیری اقدام.</li>
+          <li><b>نتیجه:</b> خروجی یا دستاورد حاصل‌شده از اقدام.</li>
+          <li><b>اقدام بعدی:</b> گام بعدی موردنیاز برای ادامه پیگیری.</li>
+          <li><b>توضیحات:</b> یادداشت‌ها و نکات تکمیلی مرتبط با اقدام.</li>
+        </ol>
+        <h4>نمونه فرمان‌های صوتی</h4>
+        <ul>
+          <li>ثبت جدید: «ثبت کار جدید؛ پیگیری انعقاد قرارداد تامین‌کننده فولاد، اولویت بالا، دپارتمان امور قراردادها».</li>
+          <li>ثبت تسک: «تسک جدید برای آقای رضایی؛ پیگیری ارسال پیش‌نویس قرارداد».</li>
+          <li>ویرایش: «ردیف ۴، ستون ۱۵ اصلاح شود به برگزاری جلسه نهایی با پیمانکار».</li>
+          <li>ویرایش با نام ستون: «سطر ۲، توضیحات ویرایش شود: ارسال مدارک به مالی».</li>
+          <li>ویرایش پیشرفت: «مورد ۴، پیشرفت اصلاح شود به ۷۰ درصد».</li>
+          <li>ویرایش یادآور: «ردیف ۴، آلارم تغییر کند به فردا ساعت ۱۱».</li>
+        </ul>
+        <p><b>کلمات کلیدی و مترادف‌ها:</b> ثبت کار جدید، کار جدید، تسک جدید، وظیفه جدید، اقدام جدید، اضافه کن، ایجاد کن؛ برای اصلاح نیز ویرایش شود، اصلاح شود، تغییر بده، عوض کن، به‌روزرسانی کن، ثبت شود. برای اشاره به ردیف از ردیف، سطر، شماره، مورد، آیتم و تسک استفاده کنید.</p>
+        <h4>راهنمای جامع فرمان‌های صوتی (راهنمای کامل ثبت و ویرایش)</h4>
+        <p>برای ثبت، ابتدا یکی از عبارت‌های شروع ثبت را بگویید، سپس شرح اقدام و مشخصات آن را بیان کنید. برای ویرایش، ابتدا شماره ردیف و سپس نام یا شماره ستون و مقدار جدید را اعلام کنید. مکث کوتاه بین بخش‌ها باعث تشخیص بهتر گفتار می‌شود.</p>
+        <h4>کلیدواژه‌ها و مترادف‌های هر ستون</h4>
+        <ol>
+          <li><b>ستون ۱ ـ شماره:</b> شماره، ردیف، سطر، ردیف شماره، مورد، آیتم، شناسه، کد تسک. فقط برای انتخاب رکورد استفاده می‌شود.</li>
+          <li><b>ستون ۲ ـ دسته‌بندی:</b> دسته‌بندی، گروه، نوع کار، نوع فعالیت، طبقه‌بندی، موضوع؛ مانند فعالیت اجرایی، پیگیری، اهداف عملیاتی، اهداف و برنامه‌ها، تسک.</li>
+          <li><b>ستون ۳ ـ شرح اقدام:</b> شرح اقدام، عنوان، شرح کار، موضوع، نام تسک، وظیفه، اقدام، کار، پیگیری، عنوان کار.</li>
+          <li><b>ستون ۴ ـ دپارتمان:</b> دپارتمان، واحد، بخش، حوزه، گروه؛ تولیدی، غیرتولیدی، امور قراردادها، قراردادها، همه کارشناسان، کلیه کارشناسان.</li>
+          <li><b>ستون ۵ ـ اولویت:</b> اولویت، فوریت، اهمیت، درجه اهمیت، سطح؛ بحرانی، خیلی فوری، فوری، بالا، متوسط، عادی، پایین، کم.</li>
+          <li><b>ستون ۶ ـ وضعیت:</b> وضعیت، شرایط، مرحله، حالت؛ شروع نشده، انجام نشده، در حال انجام، در دست اقدام، منتظر تأیید، متوقف، لغو، تکمیل شده، تمام شده، انجام شد.</li>
+          <li><b>ستون ۷ ـ مسئول:</b> مسئول، کارشناس، ارجاع به، واگذار به، محول به، انجام‌دهنده، پیگیر، فرد مسئول، نام کارشناس.</li>
+          <li><b>ستون ۸ ـ ماه:</b> ماه، ماه گزارش، ماه عملکرد، ماه مربوطه؛ فروردین تا اسفند و نام ماه به‌صورت کامل یا کوتاه.</li>
+          <li><b>ستون ۹ ـ تاریخ شروع:</b> تاریخ شروع، شروع، از تاریخ، تاریخ آغاز، زمان شروع، آغاز کار.</li>
+          <li><b>ستون ۱۰ ـ تاریخ پایان:</b> تاریخ پایان، موعد، سررسید، مهلت، ددلاین، تا تاریخ، زمان تحویل، پایان کار.</li>
+          <li><b>ستون ۱۱ ـ تاریخ تکمیل:</b> تاریخ تکمیل، تاریخ اتمام، تاریخ انجام، پایان واقعی، زمان تکمیل، روز اتمام.</li>
+          <li><b>ستون ۱۲ ـ درصد پیشرفت:</b> پیشرفت، درصد، درصد انجام، میزان پیشرفت، چند درصد، وضعیت پیشرفت؛ مقدار صفر تا صد.</li>
+          <li><b>ستون ۱۳ ـ آلارم:</b> آلارم، یادآور، یادآوری، هشدار، زنگ، زمان یادآوری، ساعت پیگیری، اعلان.</li>
+          <li><b>ستون ۱۴ ـ نتیجه:</b> نتیجه، خروجی، دستاورد، حاصل کار، جمع‌بندی، نتیجه پیگیری، گزارش نهایی.</li>
+          <li><b>ستون ۱۵ ـ اقدام بعدی:</b> اقدام بعدی، گام بعد، مرحله بعد، پیگیری بعدی، کار بعدی، ادامه کار، برنامه بعد.</li>
+          <li><b>ستون ۱۶ ـ توضیحات:</b> توضیحات، شرح تکمیلی، یادداشت، نکته، جزئیات، ملاحظات، توضیح اضافه، کامنت.</li>
+        </ol>
+        <h4>عبارت‌های شروع فرمان و تشخیص عملیات</h4>
+        <p><b>ثبت جدید:</b> ثبت کار جدید، ثبت تسک جدید، تسک جدید، وظیفه جدید، کار جدید، اقدام جدید، ایجاد کار، ایجاد تسک، اضافه کردن کار، اضافه کن، یک مورد ثبت کن، وظیفه‌ای ثبت کن، ارجاع کار جدید.</p>
+        <p><b>ویرایش:</b> ویرایش کن، اصلاح کن، اصلاح شود، ویرایش شود، تغییر بده، تغییر کند، عوض کن، به‌روزرسانی کن، تصحیح کن، مقدار را بگذار، جایگزین کن، ثبت اصلاحیه.</p>
+        <p><b>ارجاع و تعیین مسئول:</b> ارجاع بده به، واگذار کن به، محول کن به، مسئولش باشد، بسپار به، بده به، برای آقای/خانم ...، توسط کارشناس ... انجام شود.</p>
+        <p><b>شناسه ردیف:</b> ردیف، سطر، شماره، مورد، آیتم، تسک، کار شماره، وظیفه شماره. پس از آن عدد ردیف را بیان کنید.</p>
+        <h4>نمونه‌های کامل و قابل استفاده</h4>
+        <ul>
+          <li>«ثبت کار جدید؛ شرح اقدام پیگیری قرارداد تأمین‌کننده؛ دپارتمان امور قراردادها؛ اولویت بالا؛ مسئول آقای رضایی؛ تاریخ پایان ۱۴۰۵/۰۹/۳۰».</li>
+          <li>«تسک جدید برای خانم احمدی؛ پیگیری ارسال مدارک؛ وضعیت شروع نشده؛ ماه آذر».</li>
+          <li>«ردیف ۱۲، ستون ۷ اصلاح شود به آقای رضایی».</li>
+          <li>«سطر ۵، شرح اقدام تغییر کند به پیگیری تحویل قطعات».</li>
+          <li>«مورد ۸، اولویت را بحرانی کن».</li>
+          <li>«ردیف ۳، وضعیت تکمیل شده؛ تاریخ تکمیل امروز؛ پیشرفت صد درصد».</li>
+          <li>«شماره ۶، درصد پیشرفت را به هفتاد درصد تغییر بده».</li>
+          <li>«تسک شماره ۹، یادآور فردا ساعت ۱۰ صبح».</li>
+          <li>«ردیف ۴، نتیجه ثبت شود: قرارداد امضا شد».</li>
+          <li>«مورد ۲، اقدام بعدی اصلاح شود به دریافت تأییدیه کیفیت».</li>
+          <li>«ردیف ۱۱، توضیحات اضافه شود: پیگیری مجدد در جلسه هفتگی».</li>
+        </ul>
+        <h4>نکات مهم برای دقت بیشتر</h4>
+        <ul>
+          <li>در ویرایش، شماره ردیف و فیلد را صریح بگویید؛ برای جلوگیری از اشتباه از شماره ستون هم استفاده کنید.</li>
+          <li>برای تاریخ، روز و ماه و سال را کامل بگویید؛ برای ساعت، ساعت و دقیقه را اعلام کنید.</li>
+          <li>برای درصد پیشرفت، عدد را همراه کلمه «درصد» بیان کنید.</li>
+          <li>نام مسئول باید مطابق نام ثبت‌شده در فهرست کاربران باشد.</li>
+          <li>پس از ثبت صوتی، پیش‌نویس را بررسی و سپس تأیید کنید. فرمان ویرایش نیز پس از اعمال، در جدول کنترل شود.</li>
+          <li>اگر فرمان چند تغییر دارد، هر تغییر را با نام ستون یا شماره آن از تغییر بعدی جدا کنید.</li>
+        </ul>
+        <div class="hints" style="margin-top:14px;">
+          <b>راهنمای فرمان‌های صوتی هوشمند ـ نمونه‌های اصلی نسخه ۱۶:</b><br/>
+          • <b>ثبت تسک جدید:</b> «پیگیری انعقاد قرارداد تأمین‌کننده فولاد، دسته‌بندی پیگیری، دپارتمان امور قراردادها، اولویت بحرانی، تا پایان آذرماه، آلارم فردا ساعت ۱۰، اقدام بعدی ارسال پیش‌نویس حقوقی، توضیحات فوری برای جلسه».<br/>
+          • <b>ویرایش با شماره ستون:</b> «مورد ۴ ستون ۱۵ برگزاری جلسه نهایی با پیمانکار»؛ «ردیف ۲ ستون ۱۶ ارسال مدارک به مالی».<br/>
+          • <b>ویرایش با نام ستون:</b> «مورد ۴ اقدام بعدی برگزاری جلسه نهایی با پیمانکار»؛ «مورد ۲ توضیحات ارسال مدارک به مالی».<br/>
+          • <b>پیشرفت و یادآور:</b> «شماره ۴ ستون ۱۲ هفتاد درصد»؛ «مورد ۴ آلارم فردا ساعت ۱۱».
+        </div>
+        <p><b>نکته:</b> سامانه از کلیدواژه‌های بالا برای تشخیص منظور استفاده می‌کند؛ با این حال، تأیید پیش‌نویس ثبت و بازبینی نتیجه ویرایش ضروری است.</p>
+      </div>
     </div>
 
     <!-- پنل مدیریت کاربران -->
@@ -836,7 +1102,7 @@
         </div>
         <div>
           <label style="font-size:11.5px; font-weight:bold;">۱۳. آلارم یادآور:</label>
-          <input id="draftAlarm" type="datetime-local" style="width:100%; direction:ltr;" />
+          <div class="jalali-alarm-row"><button type="button" class="jcal-btn" onclick="openJalaliPicker('draftAlarmDate', this)" title="انتخاب از تقویم شمسی">📅</button><input id="draftAlarmDate" type="text" placeholder="1405/09/05" maxlength="10" /><input id="draftAlarmTime" type="time" value="09:00" /></div>
         </div>
         <div>
           <label style="font-size:11.5px; font-weight:bold;">۱۴. نتیجه:</label>
@@ -853,14 +1119,6 @@
       </div>
     </div>
 
-    <div class="hints">
-      <b>راهنمای جامع فرمان‌های صوتی هوشمند (۱۶ ستون + ویرایش با شماره یا نام ستون):</b><br/>
-      • <b>ثبت تسک جدید:</b> «پیگیری انعقاد قرارداد تامین‌کننده فولاد، دسته‌بندی پیگیری، دپارتمان امور قراردادها، اولویت بحرانی، تا پایان آذرماه، آلارم فردا ساعت ۱۰، اقدام بعدی ارسال پیش‌نویس حقوقی، توضیحات فوری برای جلسه»<br/>
-      • <b>ویرایش صوتی هر ردیف با شماره ستون (۱ تا ۱۶) یا نام ستون:</b><br/>
-      &nbsp;&nbsp;– «<b>مورد ۴ ستون ۱۵ برگزاری جلسه نهایی با پیمانکار</b>» یا «<b>مورد ۴ اقدام بعدی برگزاری جلسه نهایی با پیمانکار</b>»<br/>
-      &nbsp;&nbsp;– «<b>ردیف ۲ ستون ۱۶ ارسال مدارک به مالی</b>» یا «<b>مورد ۲ توضیحات ارسال مدارک به مالی</b>»<br/>
-      &nbsp;&nbsp;– «<b>شماره ۴ ستون ۱۲ ۷۰ درصد</b>» یا «<b>مورد ۴ پیشرفت هفتاد درصد</b>» | «<b>مورد ۴ آلارم فردا ساعت ۱۱</b>» | «<b>مورد ۱ ستون ۲ اهداف عملیاتی</b>»
-    </div>
 
     <div id="statusBox" class="status">
       وضعیت: آماده شنیدن فرمان صوتی مداوم یا ثبت دستی در ۱۶ ستون...
@@ -891,6 +1149,10 @@
           <select id="fStatus"></select>
         </div>
         <div>
+          <label>۷. مسئول (Responsible):</label>
+          <select id="fAssignee"></select>
+        </div>
+        <div>
           <label>۸. ماه (Month):</label>
           <select id="fMonth"></select>
         </div>
@@ -903,12 +1165,16 @@
           <input id="fEndDate" type="text" placeholder="مثلاً 1405/09/30" style="direction:ltr;" />
         </div>
         <div>
+          <label>۱۱. تاریخ تکمیل (Completion Date):</label>
+          <input id="fCompletionDate" type="text" placeholder="مثلاً 1405/09/30" style="direction:ltr;" />
+        </div>
+        <div>
           <label>۱۲. درصد پیشرفت (%):</label>
           <input id="fProgress" type="number" min="0" max="100" step="10" value="0" />
         </div>
         <div>
           <label>۱۳. آلارم یادآور (Alarm):</label>
-          <input id="fAlarm" type="datetime-local" style="direction:ltr;" />
+          <div class="jalali-alarm-row"><button type="button" class="jcal-btn" onclick="openJalaliPicker('fAlarmDate', this)" title="انتخاب از تقویم شمسی">📅</button><input id="fAlarmDate" type="text" placeholder="1405/09/05" maxlength="10" /><input id="fAlarmTime" type="time" value="09:00" /></div>
         </div>
         <div>
           <label>۱۴. نتیجه (Result):</label>
@@ -952,7 +1218,7 @@
             <th>عملیات</th>
           </tr>
         </thead>
-        <tbody id="tableBody"></tbody>
+        <tbody id="taskTableBody"></tbody>
       </table>
     </div>
   </div>
@@ -1036,7 +1302,7 @@
         </div>
         <div>
           <label style="font-size:12px; font-weight:bold;">۱۳. آلارم یادآور:</label>
-          <input id="eAlarm" type="datetime-local" style="width:100%; direction:ltr;" />
+          <div class="jalali-alarm-row"><button type="button" class="jcal-btn" onclick="openJalaliPicker('eAlarmDate', this)" title="انتخاب از تقویم شمسی">📅</button><input id="eAlarmDate" type="text" placeholder="1405/09/05" maxlength="10" /><input id="eAlarmTime" type="time" value="09:00" /></div>
         </div>
         <div>
           <label style="font-size:12px; font-weight:bold;">۱۴. نتیجه:</label>
@@ -1069,10 +1335,18 @@
       "دی", "بهمن", "اسفند"
     ];
 
-    var DEPARTMENTS = [
+    var MONTH_MAP = {
+      "فروردین": 1, "اردیبهشت": 2, "خرداد": 3,
+      "تیر": 4, "مرداد": 5, "شهریور": 6,
+      "مهر": 7, "آبان": 8, "آذر": 9,
+      "دی": 10, "بهمن": 11, "اسفند": 12
+    };
+
+    var TASK_DEPARTMENTS = [
       "کارشناس تولیدی",
       "کارشناس غیر تولیدی",
-      "کارشناس امور قراردادها"
+      "کارشناس امور قراردادها",
+      "کلیه کارشناس ها"
     ];
 
     var CATEGORIES = [
@@ -1163,7 +1437,41 @@
       if (isNaN(d.getTime())) return isoStr;
       var j = gregorianToJalali(d.getFullYear(), d.getMonth() + 1, d.getDate());
       var mName = JALALI_MONTHS[j.jm - 1] || "";
-      return j.jd + " " + mName + " " + j.jy + " - ساعت " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+      return j.jy + "/" + pad2(j.jm) + "/" + pad2(j.jd) + " (" + j.jd + " " + mName + ") - " + pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+    }
+
+    function isoToJalaliDateTimeParts(isoStr) {
+      if (!isoStr) return { dateStr: "", timeStr: "09:00" };
+      var d = new Date(isoStr);
+      if (isNaN(d.getTime())) return { dateStr: "", timeStr: "09:00" };
+      var j = gregorianToJalali(d.getFullYear(), d.getMonth() + 1, d.getDate());
+      return {
+        dateStr: j.jy + "/" + pad2(j.jm) + "/" + pad2(j.jd),
+        timeStr: pad2(d.getHours()) + ":" + pad2(d.getMinutes())
+      };
+    }
+
+    function jalaliDateTimeToIso(dateStr, timeStr) {
+      var normDate = toEnglishDigits((dateStr || "").trim());
+      var normTime = toEnglishDigits((timeStr || "09:00").trim());
+      if (!normDate) return "";
+      var m = normDate.match(/^(1[34]\d{2})\/(\d{1,2})\/(\d{1,2})$/);
+      if (!m) return "";
+      var jy = parseInt(m[1], 10);
+      var jm = Math.min(12, Math.max(1, parseInt(m[2], 10)));
+      var maxD = getJalaliMonthDays(jy, jm);
+      var jd = Math.min(maxD, Math.max(1, parseInt(m[3], 10)));
+      var g = jalaliToGregorian(jy, jm, jd);
+
+      var hr = 9, mn = 0;
+      var tm = normTime.match(/^(\d{1,2})(?::(\d{1,2}))?$/);
+      if (tm) {
+        hr = Math.min(23, Math.max(0, parseInt(tm[1], 10)));
+        mn = tm[2] ? Math.min(59, Math.max(0, parseInt(tm[2], 10))) : 0;
+      }
+      var dt = new Date(g.gy, g.gm - 1, g.gd, hr, mn, 0, 0);
+      if (isNaN(dt.getTime())) return "";
+      return dateObjToIsoLocal(dt);
     }
 
     function getTodayJalali() {
@@ -1237,91 +1545,72 @@
         "سیزدهم": "13", "سیزده": "13",
         "چهاردهم": "14", "چهارده": "14",
         "پانزدهم": "15", "پانزده": "15",
-        "شانزدهم": "16", "شانزده": "16",
-        "هفدهم": "17", "هفده": "17",
-        "هجدهم": "18", "هجده": "18",
-        "نوزدهم": "19", "نوزده": "19",
-        "بیستم": "20", "بیست": "20",
-        "سی‌ام": "30", "سی ام": "30", "سی": "30",
-        "چهل": "40", "پنجاه": "50", "شصت": "60",
-        "هفتاد": "70", "هشتاد": "80", "نود": "90", "صد": "100"
+        "شانزدهم": "16", "شانزده": "16"
       };
-
-      for (var w in singleWords) {
-        out = out.split(" " + w + " ").join(" " + singleWords[w] + " ");
-        if (out.indexOf(w + " ") === 0) out = singleWords[w] + out.slice(w.length);
-        if (out.lastIndexOf(" " + w) === out.length - w.length - 1) {
-          out = out.slice(0, out.length - w.length) + singleWords[w];
-        }
+      for (var sw in singleWords) {
+        out = out.replace(new RegExp("(?:^|\s)" + sw + "(?=\s|$)", "g"), " " + singleWords[sw] + " ");
       }
-      return out;
-    }
-
-    var MONTH_MAP = {
-      "فروردین": 1, "اردیبهشت": 2, "خرداد": 3,
-      "تیر": 4, "مرداد": 5, "شهریور": 6,
-      "مهر": 7, "آبان": 8, "آذر": 9,
-      "دی": 10, "بهمن": 11, "اسفند": 12
-    };
-
-    function detectDepartmentFromText(text) {
-      var t = text || "";
-      if (/غیر\s*تولیدی|غیرتولیدی|خرید\s*غیر\s*تولیدی|indirect/i.test(t)) return "کارشناس غیر تولیدی";
-      if (/تولیدی|خرید\s*تولیدی|production/i.test(t)) return "کارشناس تولیدی";
-      if (/قراردادها|امور\s*قرارداد|قرارداد|حقوقی|بازرگانی\s*و\s*قرارداد/i.test(t)) return "کارشناس امور قراردادها";
-      if (/کلیه\s*کارشناس|همه\s*کارشناس|تمام\s*کارشناس|همه\s*واحد|عمومی|همگانی/i.test(t)) return "کلیه کارشناس ها";
-      return "";
+      return out.replace(/\s+/g, " ").trim();
     }
 
     function detectCategoryFromText(text) {
       var t = text || "";
-      if (/اهداف\s*و\s*برنامه‌ها|اهداف\s*و\s*برنامه|برنامه\s*ها|برنامه/i.test(t)) return "اهداف و برنامه‌ها";
-      if (/اهداف\s*عملیاتی|هدف\s*عملیاتی|پروژه\s*اصلی|operational/i.test(t)) return "اهداف عملیاتی";
-      if (/پیگیری|فالوآپ|فالو\s*آپ|مذاکره|follow/i.test(t)) return "پیگیری";
-      if (/تسک|task/i.test(t)) return "تسک";
-      if (/فعالیت\s*اجرایی|فعالیت|اقدام\s*اجرایی|اجرا|activity/i.test(t)) return "فعالیت اجرایی";
-      return "";
+      if (/اهداف\s*عملیاتی|هدف\s*عملیاتی|عملیاتی/.test(t)) return "اهداف عملیاتی";
+      if (/اهداف\s*و\s*برنامه‌ها|اهداف\s*و\s*برنامه|برنامه‌ها|برنامه\s*ها|هدف\s*و\s*برنامه/.test(t)) return "اهداف و برنامه‌ها";
+      if (/پیگیری|فالوآپ|فالو\s*آپ|دنبال\s*کردن|استعلام|پیگیر/.test(t)) return "پیگیری";
+      if (/فعالیت\s*اجرایی|اجرایی|اقدام\s*اجرایی|عملیات\s*خرید|تامین/.test(t)) return "فعالیت اجرایی";
+      if (/تسک|کار\s*روزانه|مورد/.test(t)) return "تسک";
+      return null;
+    }
+
+    function detectDepartmentFromText(text) {
+      var t = text || "";
+      if (/همه\s*کارشناسان|همه\s*کارشناس|کلیه\s*کارشناس\s*ها|کلیه\s*کارشناسان|همه\s*پرسنل|همه\s*اعضا|عمومی|all\s*experts/i.test(t)) return "کلیه کارشناس ها";
+      if (/غیر\s*تولیدی|غیرتولیدی|خرید\s*غیر\s*تولیدی|اداری|خدمات|indirect/i.test(t)) return "کارشناس غیر تولیدی";
+      if (/تولیدی|خرید\s*تولیدی|خط\s*تولید|تولید|production/i.test(t)) return "کارشناس تولیدی";
+      if (/قراردادها|امور\s*قرارداد|قرارداد|حقوقی|پیمان|بازرگانی\s*و\s*قرارداد/i.test(t)) return "کارشناس امور قراردادها";
+      return null;
     }
 
     function detectPriorityFromText(text) {
       var t = text || "";
-      if (/بحرانی|فوری|حیاتی|اورژانسی|خیلی\s*مهم|بسیار\s*مهم|critical/i.test(t)) return "بحرانی";
-      if (/بالا|مهم|ضروری|اول\s*ویت\s*بالا|high/i.test(t)) return "بالا";
-      if (/متوسط|معمولی|عادی|نرمال|medium/i.test(t)) return "متوسط";
-      if (/پایین|کم\s*اهمیت|غیر\s*فوری|low/i.test(t)) return "پایین";
-      return "";
+      if (/بحرانی|فوری|حیاتی|اورژانسی|بسیار\s*مهم|خیلی\s*مهم|critical|urgent/i.test(t)) return "بحرانی";
+      if (/بالا|مهم|زیاد|high/i.test(t)) return "بالا";
+      if (/پایین|کم|عادی|low/i.test(t)) return "پایین";
+      if (/متوسط|نرمال|medium/i.test(t)) return "متوسط";
+      return null;
     }
 
     function detectStatusFromText(text) {
       var t = text || "";
-      if (/تکمیل\s*شد|حل\s*شد|انجام\s*شد|تمام\s*شد|تموم\s*شد|بسته\s*شد|completed/i.test(t)) return "تکمیل شده";
+      if (/تکمیل\s*شده|تکمیل\s*شد|تمام\s*شد|بسته\s*شد|انجام\s*شد|خاتمه|done|completed/i.test(t)) return "تکمیل شده";
+      if (/در\s*انتظار\s*تایید|منتظر\s*تایید|تاییدیه|در\s*انتظار\s*تأیید/i.test(t)) return "در انتظار تایید";
+      if (/متوقف\s*شده|متوقف|توقف|معلق|نگه‌داشته|نگه\s*داشته|pause|paused/i.test(t)) return "متوقف شده";
+      if (/لغو\s*شده|لغو\s*شد|کنسل|باطل|ملغی|cancel/i.test(t)) return "لغو شده";
+      if (/شروع\s*نشده|آغاز\s*نشده|باز\s*نشده|شروع\s*نکن/i.test(t)) return "شروع نشده";
       if (/در\s*حال\s*انجام|در\s*جریان|در\s*حال\s*پیگیری|فعال|شروع\s*شد|in\s*progress/i.test(t)) return "در حال انجام";
-      if (/در\s*انتظار|منتظر|تایید|پاسخ|pending/i.test(t)) return "در انتظار تایید";
-      if (/متوقف|توقف|معلق|هولد|hold/i.test(t)) return "متوقف شده";
-      if (/لغو\s*شد|کنسل|منتفی|canceled/i.test(t)) return "لغو شده";
-      if (/شروع\s*نشده|باز|جدید|not\s*started/i.test(t)) return "شروع نشده";
-      return "";
+      return null;
     }
 
     function extractAlarmFromSpeech(spoken) {
-      var norm = toEnglishDigits(spoken);
+      var norm = toEnglishDigits(spoken || "");
       var now = new Date();
       var todayJ = getTodayJalali();
-      var targetDate = new Date(now.getTime());
-      var hasDate = false, hasTime = false;
+      var targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+      var hasDate = false;
+      var hasTime = false;
       var cleanNorm = norm;
 
-      var jMatch = cleanNorm.match(/(?:آلارم|یادآور)?\s*(?:روز\s*)?(\d{1,2})\s*(?:ام|م)?\s*(فروردین|اردیبهشت|خرداد|تیر|مرداد|شهریور|مهر|آبان|آذر|دی|بهمن|اسفند)(?:\s*(?:ماه))?(?:\s*(?:سال\s*)?(14\d{2}))?/);
-      if (jMatch) {
-        var jDay = Math.min(31, Math.max(1, parseInt(jMatch[1], 10)));
-        var jMonth = MONTH_MAP[jMatch[2]];
-        var jYear = jMatch[3] ? parseInt(jMatch[3], 10) : todayJ.jy;
-        if (!jMatch[3] && (jMonth < todayJ.jm || (jMonth === todayJ.jm && jDay < todayJ.jd))) jYear = todayJ.jy + 1;
-        var gConv = jalaliToGregorian(jYear, jMonth, jDay);
+      var jDateMatch = cleanNorm.match(/(?:تاریخ\s*)?(1[34]\d{2})\/(\d{1,2})\/(\d{1,2})/);
+      if (jDateMatch) {
+        var jy = parseInt(jDateMatch[1], 10);
+        var jm = Math.min(12, Math.max(1, parseInt(jDateMatch[2], 10)));
+        var jd = Math.min(getJalaliMonthDays(jy, jm), Math.max(1, parseInt(jDateMatch[3], 10)));
+        var gConv = jalaliToGregorian(jy, jm, jd);
         targetDate = new Date(gConv.gy, gConv.gm - 1, gConv.gd, 9, 0, 0);
         hasDate = true;
-        cleanNorm = cleanNorm.replace(jMatch[0], " ");
-      } else if (/پس\s*فردا|پس‌فردا/.test(cleanNorm)) {
+        cleanNorm = cleanNorm.replace(jDateMatch[0], " ");
+      } else if (/پس\s*فردا|پس‌فردا|پریروز\s*نه\s*فردا/.test(cleanNorm)) {
         targetDate.setDate(now.getDate() + 2);
         hasDate = true;
         cleanNorm = cleanNorm.replace(/پس‌?فردا/g, " ");
@@ -1329,6 +1618,9 @@
         targetDate.setDate(now.getDate() + 1);
         hasDate = true;
         cleanNorm = cleanNorm.replace(/فردا/g, " ");
+      } else if (/امروز|امشب/.test(cleanNorm)) {
+        hasDate = true;
+        cleanNorm = cleanNorm.replace(/امروز|امشب/g, " ");
       }
 
       var hour = 9, minute = 0;
@@ -1358,14 +1650,14 @@
         alarmIso = dateObjToIsoLocal(targetDate);
       }
       return {
-        title: cleanNorm.replace(/آلارم|یادآور|عصر|بعدازظهر|بعد از ظهر|صبح|شب/g, " ").replace(/\s+/g, " ").trim() || spoken.trim(),
+        title: cleanNorm.replace(/آلارم|یادآور|زنگ|هشدار|عصر|بعدازظهر|بعد از ظهر|صبح|شب/g, " ").replace(/\s+/g, " ").trim() || spoken.trim(),
         alarm: alarmIso
       };
     }
 
     function extractEndDateFromText(normText) {
       var todayJ = getTodayJalali();
-      var endMonthRegex = /(?:تا\s*)?(?:پایان|آخر|انتهای)\s*(فروردین|اردیبهشت|خرداد|تیر|مرداد|شهریور|مهر|آبان|آذر|دی|بهمن|اسفند)(?:\s*ماه)?(?:\s*(14\d{2}))?/;
+      var endMonthRegex = /(?:تا\s*)?(?:پایان|آخر|انتهای|اواخر)\s*(فروردین|اردیبهشت|خرداد|تیر|مرداد|شهریور|مهر|آبان|آذر|دی|بهمن|اسفند)(?:\s*ماه)?(?:\s*(1[34]\d{2}))?/;
       var mEnd = normText.match(endMonthRegex);
       if (mEnd) {
         var jm = MONTH_MAP[mEnd[1]];
@@ -1375,7 +1667,7 @@
         return { dateStr: jy + "/" + pad2(jm) + "/" + pad2(lastDay), matchedText: mEnd[0] };
       }
 
-      var dayMonthRegex = /(?:تا\s*(?:تاریخ|روز)?\s*)?(\d{1,2})\s*(?:ام|م)?\s*(فروردین|اردیبهشت|خرداد|تیر|مرداد|شهریور|مهر|آبان|آذر|دی|بهمن|اسفند)(?:\s*ماه)?(?:\s*(?:سال\s*)?(14\d{2}))?/;
+      var dayMonthRegex = /(?:تا\s*(?:تاریخ|روز)?\s*)?(\d{1,2})\s*(?:ام|م)?\s*(فروردین|اردیبهشت|خرداد|تیر|مرداد|شهریور|مهر|آبان|آذر|دی|بهمن|اسفند)(?:\s*ماه)?(?:\s*(?:سال\s*)?(1[34]\d{2}))?/;
       var mDay = normText.match(dayMonthRegex);
       if (mDay) {
         var jd = Math.min(31, Math.max(1, parseInt(mDay[1], 10)));
@@ -1385,24 +1677,43 @@
         return { dateStr: jy2 + "/" + pad2(jm2) + "/" + pad2(jd), matchedText: mDay[0] };
       }
 
-      var slashRegex = /(?:تا\s*)?(14\d{2})\/(\d{1,2})\/(\d{1,2})/;
+      var slashRegex = /(?:تا\s*)?(1[34]\d{2})\/(\d{1,2})\/(\d{1,2})/;
       var mSlash = normText.match(slashRegex);
       if (mSlash) {
         return { dateStr: mSlash[1] + "/" + pad2(parseInt(mSlash[2], 10)) + "/" + pad2(parseInt(mSlash[3], 10)), matchedText: mSlash[0] };
       }
 
-      var relDays = normText.match(/(?:تا\s*)?(\d+)\s*(?:روز|روزه)\s*(?:دیگه|دیگر|بعد|آینده)/);
+      var relDays = normText.match(/(?:تا\s*)?(\d+)\s*(?:روز|روزه)\s*(?:دیگه|دیگر|بعد|آینده|جلوتر)/);
       if (relDays) return { dateStr: addDaysToJalaliStr(parseInt(relDays[1], 10)), matchedText: relDays[0] };
       if (/پس\s*فردا|پس‌فردا/.test(normText)) return { dateStr: addDaysToJalaliStr(2), matchedText: "پس فردا" };
       if (/فردا/.test(normText)) return { dateStr: addDaysToJalaliStr(1), matchedText: "فردا" };
+      if (/امروز/.test(normText)) return { dateStr: getTodayJalaliStr(), matchedText: "امروز" };
       if (/هفته\s*(?:آینده|بعد)/.test(normText)) return { dateStr: addDaysToJalaliStr(7), matchedText: "هفته آینده" };
       return null;
     }
 
-    // تشخیص دستور ویرایش صوتی روی یک ردیف خاص با شماره ستون (۱ تا ۱۶) یا نام ستون
+    function applyProgressState(taskObj, newProg) {
+      var p = Math.min(100, Math.max(0, parseInt(newProg, 10) || 0));
+      taskObj.progress = p;
+      if (p === 100) {
+        taskObj.status = "تکمیل شده";
+        taskObj.done = true;
+        if (!taskObj.completionDate) taskObj.completionDate = getTodayJalaliStr();
+      } else {
+        taskObj.done = false;
+        taskObj.completionDate = "";
+        if (taskObj.status === "تکمیل شده") {
+          taskObj.status = "در حال انجام";
+        }
+      }
+    }
+
+    // تشخیص دستور ویرایش صوتی روی یک ردیف خاص با شماره ستون (۱ تا ۱۶) یا نام ستون و دایره لغات گسترده
     function tryParseVoiceEditCommand(rawSpeech) {
-      var norm = toEnglishDigits(rawSpeech.trim());
-      var rowRegex = /^(?:در\s*)?(?:ردیف|شماره|مورد|سطر|آیتم|تسک)\s*(?:شماره\s*)?(\d+)\s*(.+)$/;
+      var norm = toEnglishDigits(rawSpeech.trim())
+        .replace(/^(?:لطفا\s*)?(?:ویرایش|اصلاح|تغییر)\s*/i, "")
+        .replace(/[،,؛]/g, " ");
+      var rowRegex = /^(?:در\s*|روی\s*|برای\s*)?(?:ردیف|شماره|مورد|سطر|آیتم|تسک|اقدام)\s*(?:شماره\s*|عدد\s*)?(\d+)\s*(.+)$/;
       var m = norm.match(rowRegex);
       if (!m) return null;
 
@@ -1417,30 +1728,29 @@
 
       var changes = [];
 
-      // تشخیص شماره ستون در صورت ذکر «ستون X»
-      var colNumMatch = rest.match(/ستون\s*(?:شماره\s*)?(\d{1,2})\s*(.*)$/);
+      var colNumMatch = rest.match(/(?:ستون|فیلد|خونه|خانه)\s*(?:شماره\s*)?(\d{1,2})\s*(.*)$/);
       var colNum = colNumMatch ? parseInt(colNumMatch[1], 10) : 0;
       var colTail = colNumMatch ? (colNumMatch[2] || "").trim() : "";
 
-      var afterToMatch = rest.match(/(?:تغییر\s*کن[ده]?\s*به|بش[هو]د?|شود|ثبت\s*شود|ثبت|به|روی)\s+(.+)$/);
+      var afterToMatch = rest.match(/(?:اصلاح\s*(?:شود|کن)|ویرایش\s*(?:شود|کن)|تغییر\s*(?:کند|کن|داده\s*شود)|به\s*روزرسانی\s*(?:شود|کن)|تغییر\s*کن[ده]?\s*به|بذار\s*روی|بگذار\s*روی|عوض\s*کن\s*به|تبدیل\s*کن\s*به|ببر\s*به|بش[هو]د?|شود|ثبت\s*شود|ثبت|به|روی)\s*(?:به\s*)?(.+)$/);
       var afterVal = (afterToMatch ? afterToMatch[1].trim() : "") ||
-        colTail.replace(/^(?:تغییر\s*کن[ده]?\s*به|بش[هو]د?|شود|ثبت\s*شود|ثبت|به|روی)\s+/i, "").trim();
+        colTail.replace(/^(?:تغییر\s*کن[ده]?\s*به|بذار\s*روی|بگذار\s*روی|عوض\s*کن\s*به|تبدیل\s*کن\s*به|ببر\s*به|بش[هو]د?|شود|ثبت\s*شود|ثبت|به|روی)\s+/i, "").trim();
 
-      var isCat = (colNum === 2) || /دسته\s*بندی|دسته‌بندی|نوع\s*کار/.test(rest);
-      var isTitle = (colNum === 3) || /شرح\s*اقدام|شرح|عنوان|متن/.test(rest);
-      var isDept = (colNum === 4) || /دپارتمان|واحد|بخش/.test(rest);
-      var isPrio = (colNum === 5) || /اولویت|ضرورت|فوریت/.test(rest);
-      var isStatus = (colNum === 6) || /وضعیت|تکمیل\s*شد|حل\s*شد|انجام\s*شد|متوقف|لغو/.test(rest);
-      var isAssignee = (colNum === 7) || /مسئول|کارشناس|ارجاع/.test(rest);
-      var isMonth = (colNum === 8) || /ماه/.test(rest);
-      var isStartDate = (colNum === 9) || /تاریخ\s*شروع|شروع/.test(rest);
-      var isEndDate = (colNum === 10) || /تاریخ\s*پایان|مهلت|ددلاین|سررسید|پایان/.test(rest);
-      var isCompDate = (colNum === 11) || /تاریخ\s*تکمیل|تکمیل/.test(rest);
-      var isProgress = (colNum === 12) || /درصد\s*پیشرفت|پیشرفت|درصد/.test(rest);
-      var isAlarm = (colNum === 13) || /آلارم|یادآور|زنگ/.test(rest);
-      var isResult = (colNum === 14) || /نتیجه/.test(rest);
-      var isNextAction = (colNum === 15) || /اقدام\s*بعدی|گام\s*بعدی|کار\s*بعدی/.test(rest);
-      var isNotes = (colNum === 16) || /توضیحات|یادداشت|نکته/.test(rest);
+      var isCat = (colNum === 2) || /دسته\s*بندی|دسته‌بندی|نوع\s*کار|نوع\s*اقدام|دسته/.test(rest);
+      var isTitle = (colNum === 3) || /شرح\s*اقدام|شرح|عنوان|موضوع|متن\s*اقدام|متن/.test(rest);
+      var isDept = (colNum === 4) || /دپارتمان|واحد|بخش|حوزه|گروه\s*کارشناسی/.test(rest);
+      var isPrio = (colNum === 5) || /اولویت|ضرورت|فوریت|اهمیت/.test(rest);
+      var isStatus = (colNum === 6) || /وضعیت|حالت|تکمیل\s*شد|حل\s*شد|انجام\s*شد|متوقف|لغو/.test(rest);
+      var isAssignee = (colNum === 7) || /مسئول|کارشناس|ارجاع|تحویل\s*گیرنده|فرد/.test(rest);
+      var isMonth = (colNum === 8) || /(?:^|\s)ماه(?:\s|$)/.test(rest);
+      var isStartDate = (colNum === 9) || /تاریخ\s*شروع|شروع\s*کار|آغاز|شروع/.test(rest);
+      var isEndDate = (colNum === 10) || /تاریخ\s*پایان|مهلت|ددلاین|سررسید|موعد|پایان/.test(rest);
+      var isCompDate = (colNum === 11) || /تاریخ\s*تکمیل|تاریخ\s*اتمام|تکمیل/.test(rest);
+      var isProgress = (colNum === 12) || /درصد\s*پیشرفت|پیشرفت|درصد|میزان\s*انجام/.test(rest);
+      var isAlarm = (colNum === 13) || /آلارم|یادآور|زنگ|هشدار/.test(rest);
+      var isResult = (colNum === 14) || /نتیجه|خروجی|دستاورد/.test(rest);
+      var isNextAction = (colNum === 15) || /اقدام\s*بعدی|گام\s*بعدی|کار\s*بعدی|مرحله\s*بعدی/.test(rest);
+      var isNotes = (colNum === 16) || /توضیحات|یادداشت|نکته|شرح\s*تکمیلی/.test(rest);
 
       if (isCat) {
         var newCat = detectCategoryFromText(afterVal || colTail || rest);
@@ -1468,6 +1778,10 @@
             if (!taskObj.completionDate) taskObj.completionDate = getTodayJalaliStr();
           } else {
             taskObj.done = false;
+            if (taskObj.progress === 100) {
+              taskObj.progress = 80;
+              taskObj.completionDate = "";
+            }
           }
           changes.push("ستون ۶ (وضعیت) ← " + newStat);
         }
@@ -1506,12 +1820,7 @@
         var pctM = pctSrc.match(/(\d{1,3})\s*(?:درصد)?/);
         if (pctM) {
           var pVal = Math.min(100, Math.max(0, parseInt(pctM[1], 10)));
-          taskObj.progress = pVal;
-          if (pVal === 100) {
-            taskObj.status = "تکمیل شده";
-            taskObj.done = true;
-            if (!taskObj.completionDate) taskObj.completionDate = getTodayJalaliStr();
-          }
+          applyProgressState(taskObj, pVal);
           changes.push("ستون ۱۲ (پیشرفت) ← " + pVal + "%");
         }
       }
@@ -1540,10 +1849,11 @@
       return { found: true, id: targetId, changes: changes };
     }
 
-    // استخراج کامل تمام ۱۶ ستون از مکالمه صوتی برای ساخت پیش‌نویس
     function parseSpeechToDraft(rawSpeech) {
       var norm = toEnglishDigits(rawSpeech.trim());
-      var workText = norm;
+      var workText = norm
+        .replace(/^(?:لطفا\s*)?(?:(?:ثبت|ایجاد|اضافه\s*کردن)\s*(?:یک\s*)?)?(?:(?:کار|تسک|وظیفه|اقدام|مورد|فعالیت)\s*جدید|(?:کار|تسک|وظیفه|اقدام)\s*تازه)\s*[:،,\-]?\s*/i, "")
+        .replace(/^(?:لطفا\s*)?(?:ثبت\s*کن|اضافه\s*کن|ایجاد\s*کن|ثبت)\s*[:،,\-]?\s*/i, "");
 
       var target = getTargetAssignee(workText);
       workText = target.cleanedTitle;
@@ -1551,7 +1861,7 @@
       var dept = detectDepartmentFromText(workText);
       if (!dept) {
         for (var i = 0; i < usersList.length; i++) {
-          if (usersList[i].username === target.username && usersList[i].department) {
+          if (usersList[i].username === target.username && usersList[i].department && usersList[i].department !== "مدیریت بازرگانی") {
             dept = usersList[i].department;
             break;
           }
@@ -1564,14 +1874,14 @@
       var stat = detectStatusFromText(workText) || "در حال انجام";
 
       var prog = (stat === "تکمیل شده") ? 100 : 0;
-      var pctMatch = workText.match(/پیشرفت\s*(\d{1,3})\s*(?:درصد)?|(\d{1,3})\s*درصد/);
+      var pctMatch = workText.match(/(?:درصد\s*)?پیشرفت\s*(\d{1,3})\s*(?:درصد)?|(\d{1,3})\s*درصد/);
       if (pctMatch) {
         prog = Math.min(100, Math.max(0, parseInt(pctMatch[1] || pctMatch[2], 10)));
         workText = workText.replace(pctMatch[0], " ");
       }
 
       var alarmIso = "";
-      if (/آلارم|یادآور|ساعت/.test(workText)) {
+      if (/آلارم|یادآور|زنگ|هشدار|ساعت/.test(workText)) {
         var alObj = extractAlarmFromSpeech(workText);
         if (alObj && alObj.alarm) {
           alarmIso = alObj.alarm;
@@ -1588,19 +1898,19 @@
       }
 
       var resultVal = "", nextActionVal = "", notesVal = "";
-      var nextMatch = workText.match(/(?:اقدام\s*بعدی|گام\s*بعدی)\s*(?:عبارت\s*است\s*از|بشود|:)?\s*([^،,.]+)/);
+      var nextMatch = workText.match(/(?:اقدام\s*بعدی|گام\s*بعدی|کار\s*بعدی)\s*(?:عبارت\s*است\s*از|بشود|:)?\s*([^،,.]+)/);
       if (nextMatch) { nextActionVal = nextMatch[1].trim(); workText = workText.replace(nextMatch[0], " "); }
 
-      var notesMatch = workText.match(/(?:توضیحات|یادداشت)\s*(?:عبارت\s*است\s*از|:)?\s*([^،,.]+)/);
+      var notesMatch = workText.match(/(?:توضیحات|یادداشت|نکته)\s*(?:عبارت\s*است\s*از|:)?\s*([^،,.]+)/);
       if (notesMatch) { notesVal = notesMatch[1].trim(); workText = workText.replace(notesMatch[0], " "); }
 
-      var resMatch = workText.match(/(?:نتیجه)\s*(?:عبارت\s*است\s*از|:)?\s*([^،,.]+)/);
+      var resMatch = workText.match(/(?:نتیجه|خروجی|دستاورد)\s*(?:عبارت\s*است\s*از|:)?\s*([^،,.]+)/);
       if (resMatch) { resultVal = resMatch[1].trim(); workText = workText.replace(resMatch[0], " "); }
 
       var cleanTitle = workText
-        .replace(/دپارتمان\s*(?:کارشناس\s*تولیدی|کارشناس\s*غیر\s*تولیدی|امور\s*قراردادها|کلیه\s*کارشناس\s*ها|تولیدی|غیر\s*تولیدی|قراردادها)/g, " ")
-        .replace(/اولویت\s*(?:بحرانی|فوری|حیاتی|بالا|مهم|متوسط|پایین)/g, " ")
-        .replace(/دسته\s*بندی\s*(?:فعالیت\s*اجرایی|پیگیری|اهداف\s*عملیاتی|اهداف\s*و\s*برنامه‌ها|تسک)/g, " ")
+        .replace(/(?:دپارتمان|واحد|بخش)\s*(?:کارشناس\s*تولیدی|کارشناس\s*غیر\s*تولیدی|کارشناس\s*امور\s*قراردادها|امور\s*قراردادها|کلیه\s*کارشناس\s*ها|همه\s*کارشناسان|تولیدی|غیر\s*تولیدی|قراردادها)/g, " ")
+        .replace(/(?:اولویت|فوریت)\s*(?:بحرانی|فوری|حیاتی|بالا|مهم|متوسط|پایین)/g, " ")
+        .replace(/(?:دسته\s*بندی|دسته‌بندی|نوع\s*کار)\s*(?:فعالیت\s*اجرایی|پیگیری|اهداف\s*عملیاتی|اهداف\s*و\s*برنامه‌ها|تسک)/g, " ")
         .replace(/\s+/g, " ")
         .trim();
 
@@ -1634,6 +1944,64 @@
     var tasks = [];
     var nextNumber = 1;
     var isSyncing = false;
+    var pendingDeletedTaskIds = [];
+    var taskSyncBaseline = {};
+    var offlineDbPromise = null;
+    var offlineSyncInProgress = false;
+
+    function openOfflineDb() {
+      if (offlineDbPromise) return offlineDbPromise;
+      offlineDbPromise = new Promise(function(resolve, reject) {
+        if (!window.indexedDB) { reject(new Error("ذخیره‌سازی آفلاین در این مرورگر پشتیبانی نمی‌شود.")); return; }
+        var req = indexedDB.open("IKS_DailyTask_Offline_v18", 1);
+        req.onupgradeneeded = function() {
+          var db = req.result;
+          if (!db.objectStoreNames.contains("users")) db.createObjectStore("users", { keyPath: "username" });
+          if (!db.objectStoreNames.contains("states")) db.createObjectStore("states", { keyPath: "username" });
+        };
+        req.onsuccess = function() { resolve(req.result); };
+        req.onerror = function() { reject(req.error || new Error("خطا در ایجاد حافظه آفلاین")); };
+      });
+      return offlineDbPromise;
+    }
+
+    function offlineStateKey() { return currentUser ? currentUser.username : ""; }
+    function saveOfflineState() {
+      if (!currentUser || !window.indexedDB) return Promise.resolve();
+      var payload = { username: currentUser.username, user: currentUser, tasks: tasks,
+        users: usersList, nextNumber: nextNumber, deletedIds: pendingDeletedTaskIds,
+        savedAt: Date.now() };
+      return openOfflineDb().then(function(db) { return new Promise(function(resolve, reject) {
+        var tx = db.transaction("states", "readwrite"); tx.objectStore("states").put(payload);
+        tx.oncomplete = resolve; tx.onerror = function() { reject(tx.error); };
+      }); }).catch(function() {});
+    }
+
+    function loadOfflineState(username) {
+      if (!window.indexedDB) return Promise.resolve(null);
+      return openOfflineDb().then(function(db) { return new Promise(function(resolve) {
+        var req = db.transaction("states", "readonly").objectStore("states").get(username);
+        req.onsuccess = function() { resolve(req.result || null); }; req.onerror = function() { resolve(null); };
+      }); }).catch(function() { return null; });
+    }
+
+    function snapshotTaskBaseline(list) {
+      taskSyncBaseline = {};
+      (list || []).forEach(function(t) { taskSyncBaseline[String(t.id)] = JSON.stringify(t); });
+    }
+
+    function taskPayloadChanged(a, b) {
+      if (!a || !b) return true;
+      var aa = Object.assign({}, a); var bb = Object.assign({}, b);
+      delete aa.updatedAt; delete bb.updatedAt;
+      return JSON.stringify(aa) !== JSON.stringify(bb);
+    }
+
+    function registerServiceWorker() {
+      if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+        navigator.serviceWorker.register("./service-worker.js").catch(function() {});
+      }
+    }
 
     function escapeHtml(str) {
       return String(str == null ? "" : str)
@@ -1656,9 +2024,8 @@
       if (!currentUser) return false;
       if (isManager()) return true;
       var isAssignedToMe = (t.assigneeUsername === currentUser.username);
-      var isCreatedByMe = (t.createdByUsername === currentUser.username);
-      var isAssignedByManager = (t.createdByRole === "مدیر بازرگانی" && (t.assigneeUsername === currentUser.username || t.department === "کلیه کارشناس ها"));
-      return isAssignedToMe || isCreatedByMe || isAssignedByManager;
+      var legacyOwnUnassigned = (!t.assigneeUsername && t.createdByUsername === currentUser.username);
+      return isAssignedToMe || legacyOwnUnassigned;
     }
 
     function populateSelect(elId, items, selectedVal) {
@@ -1679,35 +2046,81 @@
       if (badge) badge.innerText = "امروز: " + todayJ.jd + " " + JALALI_MONTHS[todayJ.jm - 1] + " " + todayJ.jy;
 
       populateSelect("fCategory", CATEGORIES, CATEGORIES[0]);
-      populateSelect("fDepartment", DEPARTMENTS, DEPARTMENTS[0]);
+      populateSelect("fDepartment", TASK_DEPARTMENTS, TASK_DEPARTMENTS[0]);
       populateSelect("fPriority", PRIORITIES, "متوسط");
       populateSelect("fStatus", STATUSES, "در حال انجام");
+      populateSelect("fAssignee", usersList.map(function(u){ return u.username; }), currentUser ? currentUser.username : "");
+      var fAssignee = document.getElementById("fAssignee");
+      if (fAssignee) {
+        var assigneeHtml = "";
+        var availableAssignees = isManager() ? usersList : [currentUser];
+        for (var ai = 0; ai < availableAssignees.length; ai++) {
+          var au = availableAssignees[ai];
+          assigneeHtml += "<option value='" + escapeHtml(au.username) + "'>" + escapeHtml(au.name) + "</option>";
+        }
+        fAssignee.innerHTML = assigneeHtml;
+      }
       populateSelect("fMonth", JALALI_MONTHS, getCurrentMonthName());
       document.getElementById("fStartDate").value = getTodayJalaliStr();
 
       populateSelect("draftCategory", CATEGORIES, CATEGORIES[0]);
-      populateSelect("draftDepartment", DEPARTMENTS, DEPARTMENTS[0]);
+      populateSelect("draftDepartment", TASK_DEPARTMENTS, TASK_DEPARTMENTS[0]);
       populateSelect("draftPriority", PRIORITIES, "متوسط");
       populateSelect("draftStatus", STATUSES, "در حال انجام");
 
       populateSelect("eCategory", CATEGORIES, CATEGORIES[0]);
-      populateSelect("eDepartment", DEPARTMENTS, DEPARTMENTS[0]);
+      populateSelect("eDepartment", TASK_DEPARTMENTS, TASK_DEPARTMENTS[0]);
       populateSelect("ePriority", PRIORITIES, "متوسط");
       populateSelect("eStatus", STATUSES, "در حال انجام");
       populateSelect("eMonth", JALALI_MONTHS, getCurrentMonthName());
+      var dashMonth = document.getElementById("dashboardMonthFilter");
+      if (dashMonth) {
+        dashMonth.innerHTML = "<option value='ALL'>همه ماه‌ها</option>";
+        for (var dm = 0; dm < JALALI_MONTHS.length; dm++) {
+          dashMonth.innerHTML += "<option value='" + JALALI_MONTHS[dm] + "'>" + JALALI_MONTHS[dm] + "</option>";
+        }
+        dashMonth.value = "ALL";
+      }
     }
 
     function checkSavedSession() {
-      try {
-        var raw = localStorage.getItem("biz_logged_user_v12");
-        if (raw) {
-          var parsed = JSON.parse(raw);
-          if (parsed && parsed.username && parsed.name) {
-            currentUser = parsed;
+      fetch("/api/auth/me", { credentials: "same-origin", cache: "no-store" })
+        .then(function (res) {
+          if (res.status === 401) { var authErr = new Error("نشست معتبر نیست"); authErr.authRejected = true; throw authErr; }
+          if (!res.ok) throw new Error("ارتباط با سرور برقرار نشد");
+          return res.json();
+        })
+        .then(function (data) {
+          if (data && data.ok && data.user) {
+            currentUser = data.user;
+            try { localStorage.setItem("biz_logged_user_v12", JSON.stringify(currentUser)); } catch (e) {}
             enterApp();
+          } else {
+            localStorage.removeItem("biz_logged_user_v12");
           }
-        }
-      } catch (e) {}
+        })
+        .catch(function (err) {
+          if (err && err.authRejected) {
+            try { localStorage.removeItem("biz_logged_user_v12"); } catch (e) {}
+            document.getElementById("loginView").classList.remove("hidden");
+            return;
+          }
+          var cachedUser = null;
+          try { cachedUser = JSON.parse(localStorage.getItem("biz_logged_user_v12") || "null"); } catch (e) {}
+          if (cachedUser && cachedUser.username) {
+            currentUser = cachedUser;
+            loadOfflineState(currentUser.username).then(function(state) {
+              if (!state) { document.getElementById("loginView").classList.remove("hidden"); return; }
+              tasks = Array.isArray(state.tasks) ? state.tasks : [];
+              usersList = Array.isArray(state.users) ? state.users : [];
+              nextNumber = state.nextNumber || 1;
+              pendingDeletedTaskIds = state.deletedIds || [];
+              snapshotTaskBaseline(tasks);
+              enterApp();
+              setStatus("حالت آفلاین؛ اطلاعات ذخیره‌شده همین حساب نمایش داده می‌شود.");
+            });
+          }
+        });
     }
 
     var isLoggingIn = false;
@@ -1782,11 +2195,14 @@
     }
 
     function doLogout() {
-      currentUser = null;
-      try { localStorage.removeItem("biz_logged_user_v12"); } catch (e) {}
-      document.getElementById("appView").classList.add("hidden");
-      document.getElementById("loginView").classList.remove("hidden");
-      document.getElementById("loginPassword").value = "";
+      fetch("/api/logout", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }).finally(function () {
+        currentUser = null;
+        tasks = []; usersList = []; pendingDeletedTaskIds = []; taskSyncBaseline = {};
+        try { localStorage.removeItem("biz_logged_user_v12"); } catch (e) {}
+        document.getElementById("appView").classList.add("hidden");
+        document.getElementById("loginView").classList.remove("hidden");
+        document.getElementById("loginPassword").value = "";
+      });
     }
 
     function enterApp() {
@@ -1808,7 +2224,17 @@
       }
 
       initAllDropdowns();
-      syncFromServer();
+      registerServiceWorker();
+      if (!tasks.length) loadOfflineState(currentUser.username).then(function(state) {
+        if (state && (!navigator.onLine || !tasks.length)) {
+          tasks = Array.isArray(state.tasks) ? state.tasks : [];
+          usersList = Array.isArray(state.users) ? state.users : usersList;
+          nextNumber = state.nextNumber || nextNumber;
+          pendingDeletedTaskIds = state.deletedIds || pendingDeletedTaskIds;
+          snapshotTaskBaseline(tasks); renderTable();
+        }
+        syncFromServer();
+      }); else syncFromServer();
     }
 
     function refreshUserDropdowns() {
@@ -1827,6 +2253,17 @@
         if (!assignSel.value && currentUser) assignSel.value = currentUser.username;
       }
 
+      var manualAssignee = document.getElementById("fAssignee");
+      if (manualAssignee) {
+        var oldManualAssignee = manualAssignee.value;
+        var manualOptions = "";
+        for (var ma = 0; ma < visibleUsers.length; ma++) {
+          manualOptions += "<option value='" + escapeHtml(visibleUsers[ma].username) + "'>" + escapeHtml(visibleUsers[ma].name) + "</option>";
+        }
+        manualAssignee.innerHTML = manualOptions;
+        if (oldManualAssignee) manualAssignee.value = oldManualAssignee;
+        if (!manualAssignee.value && currentUser) manualAssignee.value = currentUser.username;
+      }
       var targetIds = ["draftAssignee", "eAssignee"];
       for (var tIdx = 0; tIdx < targetIds.length; tIdx++) {
         var selEl = document.getElementById(targetIds[tIdx]);
@@ -1862,7 +2299,7 @@
           rows += "<td>" + escapeHtml(usr.role) + "</td>";
           rows += "<td><span class='dept-pill'>" + escapeHtml(usr.department || "-") + "</span></td>";
           rows += "<td><code>" + escapeHtml(usr.username) + "</code></td>";
-          rows += "<td><code>" + escapeHtml(usr.password) + "</code></td>";
+          rows += "<td><code>" + "••••••••" + "</code></td>";
           rows += "<td><div class='action-btns'>";
           rows += "<button type='button' class='btn-edit' onclick=\"editUserPassword('" + escapeHtml(usr.username) + "')\">تغییر رمز</button>";
           if (usr.username !== currentUser.username) {
@@ -1920,7 +2357,7 @@
         if (usersList[i].username === uname) { targetUser = usersList[i]; break; }
       }
       if (!targetUser) return;
-      var nextPass = prompt("رمز عبور جدید برای «" + targetUser.name + "» (" + targetUser.username + ") را وارد کنید:", targetUser.password || "");
+      var nextPass = prompt("رمز عبور جدید برای «" + targetUser.name + "» (" + targetUser.username + ") را وارد کنید:");
       if (nextPass === null) return;
       nextPass = nextPass.trim();
       if (!nextPass) {
@@ -1928,10 +2365,6 @@
         return;
       }
       targetUser.password = nextPass;
-      if (currentUser && currentUser.username === targetUser.username) {
-        currentUser.password = nextPass;
-        try { localStorage.setItem("biz_logged_user_v12", JSON.stringify(currentUser)); } catch (e) {}
-      }
       refreshUserDropdowns();
       fetch("/api/users", {
         method: "POST",
@@ -1956,47 +2389,19 @@
 
     function saveSelfPassword() {
       if (!currentUser) return;
-      var curP = document.getElementById("selfCurrentPass").value.trim();
-      var newP = document.getElementById("selfNewPass").value.trim();
-      var confP = document.getElementById("selfConfirmPass").value.trim();
+      var curP = document.getElementById("selfCurrentPass").value;
+      var newP = document.getElementById("selfNewPass").value;
+      var confP = document.getElementById("selfConfirmPass").value;
       var msgEl = document.getElementById("selfPassMsg");
-
-      if (!curP || !newP || !confP) {
-        msgEl.innerText = "لطفاً هر سه فیلد را تکمیل کنید.";
-        return;
-      }
-      if (newP !== confP) {
-        msgEl.innerText = "رمز عبور جدید و تکرار آن یکسان نیستند.";
-        return;
-      }
-
-      var matchedIdx = -1;
-      for (var i = 0; i < usersList.length; i++) {
-        if (usersList[i].username === currentUser.username) { matchedIdx = i; break; }
-      }
-      var storedPass = matchedIdx >= 0 ? (usersList[matchedIdx].password || "") : (currentUser.password || "");
-      if (curP !== storedPass) {
-        msgEl.innerText = "رمز عبور فعلی صحیح نیست.";
-        return;
-      }
-
-      if (matchedIdx >= 0) {
-        usersList[matchedIdx].password = newP;
-      }
-      currentUser.password = newP;
-      try { localStorage.setItem("biz_logged_user_v12", JSON.stringify(currentUser)); } catch (e) {}
-
-      var payloadUsers = usersList.length > 0 ? usersList : [currentUser];
-      fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ users: payloadUsers })
-      }).then(function () {
-        closeSelfPassModal();
-        setStatus("✅ رمز عبور حساب شما با موفقیت تغییر کرد.");
-      }).catch(function () {
-        msgEl.innerText = "خطا در ذخیره رمز جدید در سرور.";
-      });
+      if (!curP || !newP || !confP) { msgEl.innerText = "لطفاً هر سه فیلد را تکمیل کنید."; return; }
+      if (newP.length < 8) { msgEl.innerText = "رمز جدید باید حداقل ۸ نویسه داشته باشد."; return; }
+      if (newP !== confP) { msgEl.innerText = "رمز عبور جدید و تکرار آن یکسان نیستند."; return; }
+      fetch("/api/change-password", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: curP, newPassword: newP })
+      }).then(function (res) { return res.json().then(function (data) { if (!res.ok || !data.ok) throw new Error(data.error || "خطا در تغییر رمز"); return data; }); })
+        .then(function () { closeSelfPassModal(); setStatus("رمز عبور با موفقیت تغییر کرد."); })
+        .catch(function (err) { msgEl.innerText = err.message || "خطا در ذخیره رمز جدید در سرور."; });
     }
 
     function getTargetAssignee(spokenText) {
@@ -2023,52 +2428,116 @@
       return { username: chosenUsername, name: chosenName, cleanedTitle: cleaned };
     }
 
+    function handleServerAuthExpiry() {
+      currentUser = null; tasks = []; usersList = []; pendingDeletedTaskIds = []; taskSyncBaseline = {};
+      try { localStorage.removeItem("biz_logged_user_v12"); } catch (e) {}
+      document.getElementById("appView").classList.add("hidden");
+      document.getElementById("loginView").classList.remove("hidden");
+      document.getElementById("loginError").innerText = "نشست شما در سرور معتبر نیست؛ لطفاً دوباره وارد شوید.";
+    }
+
     function syncFromServer() {
-      if (!currentUser || isSyncing) return;
+      if (!currentUser || isSyncing || offlineSyncInProgress || !navigator.onLine) return;
       isSyncing = true;
-      fetch("/api/state")
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          if (data) {
-            if (Array.isArray(data.users)) { usersList = data.users; refreshUserDropdowns(); }
-            if (Array.isArray(data.tasks)) {
-              tasks = data.tasks;
-              nextNumber = data.nextNumber || 1;
-              renderTable();
-              if (!document.getElementById("dashboardPanel").classList.contains("hidden")) renderDashboard();
-            }
-          }
-          isSyncing = false;
+      fetch("/api/state", { credentials: "same-origin", cache: "no-store" })
+        .then(function (res) {
+          if (res.status === 401) { handleServerAuthExpiry(); var authErr = new Error("نشست منقضی شده است"); authErr.authRejected = true; throw authErr; }
+          if (!res.ok) throw new Error("ارتباط با سرور برقرار نشد");
+          return res.json();
         })
-        .catch(function () { isSyncing = false; });
+        .then(function (data) {
+          if (!data) throw new Error("پاسخ سرور نامعتبر است");
+          if (Array.isArray(data.users)) { usersList = data.users; refreshUserDropdowns(); }
+          var remote = Array.isArray(data.tasks) ? data.tasks : [];
+          var localById = {}; tasks.forEach(function(t) { localById[String(t.id)] = t; });
+          var merged = remote.map(function(serverTask) {
+            var localTask = localById[String(serverTask.id)];
+            if (localTask && Number(localTask.updatedAt || 0) > Number(serverTask.updatedAt || 0)) return localTask;
+            return serverTask;
+          });
+          // Keep locally-created offline tasks not yet present on the server.
+          Object.keys(localById).forEach(function(id) {
+            if (remote.some(function(t) { return String(t.id) === id; })) return;
+            var localTask = localById[id];
+            if (localTask.createdByUsername === currentUser.username) merged.push(localTask);
+          });
+          tasks = merged;
+          nextNumber = Math.max(data.nextNumber || 1, nextNumber || 1);
+          snapshotTaskBaseline(remote);
+          renderTable();
+          if (!document.getElementById("dashboardPanel").classList.contains("hidden")) renderDashboard();
+          saveOfflineState();
+          // Push the merged set; the server applies per-task last-write-wins and returns its canonical view.
+          pushTasksToServer();
+        })
+        .catch(function () { setStatus("آفلاین؛ تغییرات روی همین گوشی نگهداری می‌شوند."); isSyncing = false; });
+    }
+
+    function pushTasksToServer() {
+      if (!currentUser || !navigator.onLine || offlineSyncInProgress) return;
+      offlineSyncInProgress = true;
+      fetch("/api/tasks", {
+        method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tasks: tasks, nextNumber: nextNumber, deletedIds: pendingDeletedTaskIds.slice() })
+      }).then(function(res) {
+        if (res.status === 401) { handleServerAuthExpiry(); var authErr = new Error("نشست منقضی شده است"); authErr.authRejected = true; throw authErr; }
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+        .then(function(data) {
+          if (!data || !data.ok) throw new Error("ذخیره‌سازی ناموفق");
+          if (data.idMap) Object.keys(data.idMap).forEach(function(oldId) {
+            var newId = data.idMap[oldId]; tasks.forEach(function(task) { if (String(task.id) === String(oldId)) task.id = newId; });
+          });
+          if (Array.isArray(data.tasks)) tasks = data.tasks;
+          if (Array.isArray(data.users)) usersList = data.users;
+          pendingDeletedTaskIds = [];
+          nextNumber = data.nextNumber || nextNumber;
+          snapshotTaskBaseline(tasks);
+          saveOfflineState();
+          renderTable();
+          if (!document.getElementById("dashboardPanel").classList.contains("hidden")) renderDashboard();
+          setStatus("همگام‌سازی با سرور انجام شد.");
+        }).catch(function(err) {
+          if (!(err && err.authRejected)) { setStatus("تغییرات در گوشی ذخیره شد و در انتظار اتصال به سرور است."); saveOfflineState(); }
+        })
+        .finally(function() { offlineSyncInProgress = false; isSyncing = false; });
     }
 
     function saveTasksToServer() {
+      var now = Date.now();
+      tasks.forEach(function(t) {
+        var baseline = null;
+        try { baseline = JSON.parse(taskSyncBaseline[String(t.id)] || "null"); } catch (e) {}
+        if (!baseline || taskPayloadChanged(t, baseline)) t.updatedAt = Math.max(now, Number(t.updatedAt || 0) + 1);
+      });
       renderTable();
       if (!document.getElementById("dashboardPanel").classList.contains("hidden")) renderDashboard();
-      fetch("/api/tasks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tasks: tasks, nextNumber: nextNumber })
-      }).catch(function () {});
+      saveOfflineState();
+      if (navigator.onLine) pushTasksToServer();
+      else setStatus("آفلاین؛ تغییرات روی گوشی ذخیره شد و پس از اتصال همگام می‌شود.");
     }
 
-    function createTaskRecord(obj) {
-      var st = obj.status || "در حال انجام";
+    function buildTaskObject(obj) {
+      var idVal = parseInt(obj.id, 10) || nextNumber++;
+      if (idVal >= nextNumber) nextNumber = idVal + 1;
       var prog = Math.min(100, Math.max(0, parseInt(obj.progress, 10) || 0));
-      var isDone = (st === "تکمیل شده" || prog === 100);
-      if (isDone) { st = "تکمیل شده"; prog = 100; }
-      var compDate = obj.completionDate || (isDone ? getTodayJalaliStr() : "");
+      var isDone = (obj.status === "تکمیل شده") || (prog === 100) || Boolean(obj.done);
+      if (isDone) prog = 100;
+      var compDate = isDone ? (obj.completionDate || getTodayJalaliStr()) : "";
+      var statVal = obj.status || (isDone ? "تکمیل شده" : "در حال انجام");
+      if (prog < 100 && statVal === "تکمیل شده") statVal = "در حال انجام";
 
-      tasks.unshift({
-        id: nextNumber++,
-        category: obj.category || "فعالیت اجرایی",
+      return {
+        id: idVal,
+        category: CATEGORIES.indexOf(obj.category) > -1 ? obj.category : "فعالیت اجرایی",
         title: (obj.title || "").trim(),
         department: obj.department || "کارشناس تولیدی",
-        priority: obj.priority || "متوسط",
-        status: st,
+        priority: PRIORITIES.indexOf(obj.priority) > -1 ? obj.priority : "متوسط",
+        status: statVal,
         assigneeUsername: obj.assigneeUsername || currentUser.username,
         assigneeName: obj.assigneeName || currentUser.name,
+        referredByManager: Boolean(obj.referredByManager),
         month: obj.month || getCurrentMonthName(),
         startDate: obj.startDate || getTodayJalaliStr(),
         endDate: obj.endDate || "",
@@ -2078,165 +2547,194 @@
         result: obj.result || "",
         nextAction: obj.nextAction || "",
         notes: obj.notes || "",
-        createdByUsername: currentUser.username,
-        createdByName: currentUser.name,
-        createdByRole: currentUser.role,
+        createdByUsername: obj.createdByUsername || currentUser.username,
+        createdByName: obj.createdByName || currentUser.name,
+        createdByRole: obj.createdByRole || currentUser.role,
         done: isDone,
-        alerted: false
-      });
-      saveTasksToServer();
+        alerted: Boolean(obj.alerted)
+      };
     }
 
     // =========================================================================
-    // 4. ضبط صوتی مداوم
+    // 4. ضبط صوتی مداوم (شروع / توقف دستی) و پیش‌نمایش زنده
     // =========================================================================
-    var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    var rec = null;
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var recognition = null;
     var isRecording = false;
+    var userStoppedManually = false;
     var accumulatedTranscript = "";
     var currentInterim = "";
 
     function updateLiveTranscriptUI() {
-      var box = document.getElementById("liveTranscriptText");
-      if (box) {
-        var combined = (accumulatedTranscript + " " + currentInterim).trim();
-        box.innerText = combined || "در انتظار صحبت شما... (مکث آزاد است)";
-      }
+      var finalEl = document.getElementById("liveFinalText");
+      var interimEl = document.getElementById("liveInterimText");
+      if (finalEl) finalEl.innerText = accumulatedTranscript;
+      if (interimEl) interimEl.innerText = currentInterim;
+    }
+
+    function setRecordingButtons(recording) {
+      document.getElementById("micStartBtn").classList.toggle("hidden", recording);
+      document.getElementById("micStartBtn").classList.toggle("mic-pulse", recording);
+      document.getElementById("micStopBtn").classList.toggle("hidden", !recording);
+      document.getElementById("micCancelBtn").classList.toggle("hidden", !recording);
     }
 
     function startContinuousRecording() {
-      if (!SpeechRec) { setStatus("تشخیص گفتار در این مرورگر فعال نیست. از Chrome یا Safari استفاده کنید."); return; }
+      if (!SpeechRecognition) {
+        alert("مرورگر شما از قابلیت SpeechRecognition پشتیبانی نمی‌کند. از Google Chrome یا Edge استفاده کنید.");
+        return;
+      }
+      if (isRecording) return;
+
+      userStoppedManually = false;
       accumulatedTranscript = "";
       currentInterim = "";
-      isRecording = true;
-
-      document.getElementById("micStartBtn").classList.add("hidden");
-      document.getElementById("micStopBtn").classList.remove("hidden");
-      document.getElementById("micCancelBtn").classList.remove("hidden");
-      document.getElementById("liveTranscriptBox").classList.remove("hidden");
       updateLiveTranscriptUI();
-      setStatus("ضبط مداوم فعال شد. هر چقدر نیاز دارید مکث کنید و در انتها دکمه سبز «پایان ضبط» را بزنید.");
-      launchRecognitionInstance();
-    }
 
-    function launchRecognitionInstance() {
-      if (!isRecording) return;
-      rec = new SpeechRec();
-      rec.lang = "fa-IR";
-      rec.continuous = true;
-      rec.interimResults = true;
+      recognition = new SpeechRecognition();
+      recognition.lang = "fa-IR";
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
 
-      rec.onresult = function (e) {
-        var interim = "";
-        for (var i = e.resultIndex; i < e.results.length; i++) {
-          var tr = e.results[i][0].transcript;
-          if (e.results[i].isFinal) accumulatedTranscript = (accumulatedTranscript + " " + tr).trim();
-          else interim += tr;
+      recognition.onstart = function () {
+        isRecording = true;
+        setRecordingButtons(true);
+        setStatus("🎙️ ضبط مداوم فعال است... هر زمان صحبتتان تمام شد دکمه «توقف و ثبت پیش‌نویس» را بزنید.");
+      };
+
+      recognition.onresult = function (event) {
+        var interimChunk = "";
+        for (var i = event.resultIndex; i < event.results.length; i++) {
+          var res = event.results[i];
+          var txt = res[0].transcript || "";
+          if (res.isFinal) {
+            accumulatedTranscript += (accumulatedTranscript ? " " : "") + txt.trim();
+          } else {
+            interimChunk += txt;
+          }
         }
-        currentInterim = interim;
+        currentInterim = interimChunk;
         updateLiveTranscriptUI();
       };
 
-      rec.onerror = function (e) {
-        if (e.error === "not-allowed") {
+      recognition.onerror = function (event) {
+        if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+          userStoppedManually = true;
           isRecording = false;
-          resetRecordingButtons();
-          setStatus("دسترسی میکروفون مسدود است! اجازه Microphone را در مرورگر فعال کنید.");
+          setRecordingButtons(false);
+          setStatus("❌ دسترسی میکروفون داده نشد. لطفاً دسترسی میکروفون را در مرورگر فعال کنید.");
         }
       };
 
-      rec.onend = function () {
-        if (currentInterim) {
-          accumulatedTranscript = (accumulatedTranscript + " " + currentInterim).trim();
-          currentInterim = "";
-          updateLiveTranscriptUI();
-        }
-        if (isRecording) {
-          setTimeout(function () {
-            if (isRecording) { try { launchRecognitionInstance(); } catch (err) {} }
-          }, 200);
+      recognition.onend = function () {
+        if (!userStoppedManually && isRecording) {
+          try { recognition.start(); } catch (e) {
+            isRecording = false;
+            setRecordingButtons(false);
+          }
+        } else {
+          isRecording = false;
+          setRecordingButtons(false);
         }
       };
 
-      try { rec.start(); } catch (err) {}
-    }
-
-    function resetRecordingButtons() {
-      document.getElementById("micStartBtn").classList.remove("hidden");
-      document.getElementById("micStopBtn").classList.add("hidden");
-      document.getElementById("micCancelBtn").classList.add("hidden");
-      document.getElementById("liveTranscriptBox").classList.add("hidden");
+      try {
+        recognition.start();
+      } catch (e) {
+        setStatus("❌ خطا در شروع ضبط صوتی: " + e.message);
+      }
     }
 
     function stopAndProcessRecording() {
+      userStoppedManually = true;
       isRecording = false;
-      if (rec) { try { rec.stop(); } catch (e) {} }
-      resetRecordingButtons();
+      setRecordingButtons(false);
+      if (recognition) {
+        try { recognition.stop(); } catch (e) {}
+      }
 
-      var finalSpoken = (accumulatedTranscript + " " + currentInterim).trim();
-      accumulatedTranscript = "";
+      var fullSpoken = (accumulatedTranscript + " " + currentInterim).replace(/\s+/g, " ").trim();
       currentInterim = "";
+      updateLiveTranscriptUI();
 
-      if (!finalSpoken) { setStatus("متنی دریافت نشد. دوباره دکمه شروع ضبط را بزنید."); return; }
-
-      if (/این\s*مورد\s*رو\s*لغو\s*کن|از\s*اول\s*بگو|لغو\s*پیش\s*نویس/.test(finalSpoken)) {
-        document.getElementById("draftPreviewCard").classList.add("hidden");
-        setStatus("پیش‌نویس لغو و پاک شد.");
+      if (!fullSpoken) {
+        setStatus("⚠️ هیچ متنی از صدا دریافت نشد. دوباره تلاش کنید یا از فرم دستی استفاده کنید.");
         return;
       }
 
-      var editResult = tryParseVoiceEditCommand(finalSpoken);
+      var editResult = tryParseVoiceEditCommand(fullSpoken);
       if (editResult) {
-        if (editResult.forbidden) { setStatus("شما مجوز ویرایش مورد #" + editResult.id + " را ندارید."); return; }
-        if (!editResult.found) { setStatus("ردیف یا مورد #" + editResult.id + " در جدول پیدا نشد."); return; }
+        if (editResult.forbidden) {
+          setStatus("⛔ شما اجازه ویرایش مورد #" + editResult.id + " را ندارید.");
+          return;
+        }
+        if (!editResult.found) {
+          setStatus("⚠️ مورد یا ردیف #" + editResult.id + " یافت نشد.");
+          return;
+        }
         saveTasksToServer();
-        setStatus("✅ مورد #" + editResult.id + " با موفقیت ویرایش شد: " + editResult.changes.join(" | "));
+        setStatus("✅ ویرایش صوتی مورد #" + editResult.id + " انجام شد: " + editResult.changes.join(" | "));
         return;
       }
 
-      var draft = parseSpeechToDraft(finalSpoken);
-      showDraftPreview(draft);
-      setStatus("متن صوتی تحلیل شد. لطفاً پیش‌نمایش زیر را بررسی و دکمه «تایید و ثبت در جدول» را بزنید.");
+      var draft = parseSpeechToDraft(fullSpoken);
+      openDraftPreview(draft);
     }
 
     function cancelRecording() {
+      userStoppedManually = true;
       isRecording = false;
+      setRecordingButtons(false);
+      if (recognition) {
+        try { recognition.abort(); } catch (e) {}
+      }
       accumulatedTranscript = "";
       currentInterim = "";
-      if (rec) { try { rec.stop(); } catch (e) {} }
-      resetRecordingButtons();
+      updateLiveTranscriptUI();
       setStatus("ضبط صوتی لغو شد.");
     }
 
-    function showDraftPreview(d) {
+    function openDraftPreview(d) {
+      document.getElementById("draftRawSpeech").value = d.rawSpeech || "";
+      document.getElementById("draftCategory").value = d.category || CATEGORIES[0];
+      document.getElementById("draftTitle").value = d.title || "";
+      document.getElementById("draftDepartment").value = d.department || TASK_DEPARTMENTS[0];
+      document.getElementById("draftPriority").value = d.priority || "متوسط";
+      document.getElementById("draftStatus").value = d.status || "در حال انجام";
+      document.getElementById("draftAssignee").value = d.assigneeUsername || currentUser.username;
+      document.getElementById("draftStartDate").value = d.startDate || getTodayJalaliStr();
+      document.getElementById("draftEndDate").value = d.endDate || "";
+      document.getElementById("draftProgress").value = d.progress || 0;
+
+      var alParts = isoToJalaliDateTimeParts(d.alarm);
+      document.getElementById("draftAlarmDate").value = alParts.dateStr;
+      document.getElementById("draftAlarmTime").value = alParts.timeStr;
+
+      document.getElementById("draftResult").value = d.result || "";
+      document.getElementById("draftNextAction").value = d.nextAction || "";
+      document.getElementById("draftNotes").value = d.notes || "";
+
       document.getElementById("draftPreviewCard").classList.remove("hidden");
-      document.getElementById("draftRawSpeech").innerText = "متن شنیده‌شده: «" + d.rawSpeech + "»";
-      document.getElementById("draftCategory").value = d.category;
-      document.getElementById("draftTitle").value = d.title;
-      document.getElementById("draftDepartment").value = d.department;
-      document.getElementById("draftPriority").value = d.priority;
-      document.getElementById("draftStatus").value = d.status;
-      document.getElementById("draftAssignee").value = d.assigneeUsername;
-      document.getElementById("draftMonth").value = d.month;
-      document.getElementById("draftStartDate").value = d.startDate;
-      document.getElementById("draftEndDate").value = d.endDate;
-      document.getElementById("draftProgress").value = d.progress;
-      document.getElementById("draftAlarm").value = d.alarm || "";
-      document.getElementById("draftResult").value = d.result;
-      document.getElementById("draftNextAction").value = d.nextAction;
-      document.getElementById("draftNotes").value = d.notes;
+      setStatus("📝 پیش‌نویس آماده بررسی است. پس از تایید، دکمه «تایید و افزودن به جدول» را بزنید.");
     }
 
     function confirmDraftTask() {
       var titleVal = document.getElementById("draftTitle").value.trim();
-      if (!titleVal) { setStatus("شرح اقدام نمی‌تواند خالی باشد."); return; }
-      var aUser = document.getElementById("draftAssignee").value;
+      if (!titleVal) { alert("شرح اقدام نمی‌تواند خالی باشد."); return; }
+
+      var aUser = document.getElementById("draftAssignee").value || currentUser.username;
       var aName = currentUser.name;
       for (var i = 0; i < usersList.length; i++) {
         if (usersList[i].username === aUser) { aName = usersList[i].name; break; }
       }
 
-      createTaskRecord({
+      var alarmIso = jalaliDateTimeToIso(
+        document.getElementById("draftAlarmDate").value,
+        document.getElementById("draftAlarmTime").value
+      );
+
+      var taskObj = buildTaskObject({
         category: document.getElementById("draftCategory").value,
         title: titleVal,
         department: document.getElementById("draftDepartment").value,
@@ -2244,50 +2742,70 @@
         status: document.getElementById("draftStatus").value,
         assigneeUsername: aUser,
         assigneeName: aName,
-        month: document.getElementById("draftMonth").value,
-        startDate: document.getElementById("draftStartDate").value,
-        endDate: document.getElementById("draftEndDate").value,
+        referredByManager: isManager() && aUser !== currentUser.username,
+        month: getCurrentMonthName(),
+        startDate: document.getElementById("draftStartDate").value.trim() || getTodayJalaliStr(),
+        endDate: document.getElementById("draftEndDate").value.trim(),
         progress: document.getElementById("draftProgress").value,
-        alarm: document.getElementById("draftAlarm").value,
-        result: document.getElementById("draftResult").value,
-        nextAction: document.getElementById("draftNextAction").value,
-        notes: document.getElementById("draftNotes").value
+        alarm: alarmIso,
+        result: document.getElementById("draftResult").value.trim(),
+        nextAction: document.getElementById("draftNextAction").value.trim(),
+        notes: document.getElementById("draftNotes").value.trim()
       });
 
+      tasks.unshift(taskObj);
+      saveTasksToServer();
       document.getElementById("draftPreviewCard").classList.add("hidden");
-      setStatus("✅ تسک جدید با موفقیت برای «" + aName + "» در جدول ثبت شد.");
+      setStatus("✅ اقدام جدید با شماره #" + taskObj.id + " به جدول اضافه شد.");
     }
 
     function addManualTask() {
       var titleVal = document.getElementById("fTitle").value.trim();
-      if (!titleVal) { setStatus("لطفاً شرح اقدام را وارد کنید."); document.getElementById("fTitle").focus(); return; }
-      var target = getTargetAssignee("");
-      createTaskRecord({
+      if (!titleVal) { alert("لطفاً شرح اقدام را وارد کنید."); return; }
+
+      var targetUsername = document.getElementById("fAssignee").value || currentUser.username;
+      var targetName = currentUser.name;
+      for (var ti = 0; ti < usersList.length; ti++) {
+        if (usersList[ti].username === targetUsername) { targetName = usersList[ti].name; break; }
+      }
+      var alarmIso = jalaliDateTimeToIso(
+        document.getElementById("fAlarmDate").value,
+        document.getElementById("fAlarmTime").value
+      );
+
+      var taskObj = buildTaskObject({
         category: document.getElementById("fCategory").value,
         title: titleVal,
         department: document.getElementById("fDepartment").value,
         priority: document.getElementById("fPriority").value,
         status: document.getElementById("fStatus").value,
-        assigneeUsername: target.username,
-        assigneeName: target.name,
+        assigneeUsername: targetUsername,
+        assigneeName: targetName,
+        referredByManager: isManager() && targetUsername !== currentUser.username,
         month: document.getElementById("fMonth").value,
-        startDate: document.getElementById("fStartDate").value || getTodayJalaliStr(),
-        endDate: document.getElementById("fEndDate").value,
+        startDate: document.getElementById("fStartDate").value.trim() || getTodayJalaliStr(),
+        endDate: document.getElementById("fEndDate").value.trim(),
+        completionDate: document.getElementById("fCompletionDate").value.trim(),
         progress: document.getElementById("fProgress").value,
-        alarm: document.getElementById("fAlarm").value,
-        result: document.getElementById("fResult").value,
-        nextAction: document.getElementById("fNextAction").value,
-        notes: document.getElementById("fNotes").value
+        alarm: alarmIso,
+        result: document.getElementById("fResult").value.trim(),
+        nextAction: document.getElementById("fNextAction").value.trim(),
+        notes: document.getElementById("fNotes").value.trim()
       });
+
+      tasks.unshift(taskObj);
+      saveTasksToServer();
 
       document.getElementById("fTitle").value = "";
       document.getElementById("fEndDate").value = "";
+      document.getElementById("fCompletionDate").value = "";
       document.getElementById("fProgress").value = "0";
-      document.getElementById("fAlarm").value = "";
+      document.getElementById("fAlarmDate").value = "";
+      document.getElementById("fAlarmTime").value = "09:00";
       document.getElementById("fResult").value = "";
       document.getElementById("fNextAction").value = "";
       document.getElementById("fNotes").value = "";
-      setStatus("✅ تسک جدید برای «" + target.name + "» ثبت شد.");
+      setStatus("✅ مورد #" + taskObj.id + " ثبت شد.");
     }
 
     // =========================================================================
@@ -2304,7 +2822,7 @@
       document.getElementById("editModalTitle").innerText = "ویرایش کامل مورد #" + t.id;
       document.getElementById("eCategory").value = t.category || CATEGORIES[0];
       document.getElementById("eTitle").value = t.title || "";
-      document.getElementById("eDepartment").value = t.department || DEPARTMENTS[0];
+      document.getElementById("eDepartment").value = t.department || TASK_DEPARTMENTS[0];
       document.getElementById("ePriority").value = t.priority || "متوسط";
       document.getElementById("eStatus").value = t.status || "در حال انجام";
       document.getElementById("eAssignee").value = t.assigneeUsername || currentUser.username;
@@ -2313,7 +2831,11 @@
       document.getElementById("eEndDate").value = t.endDate || "";
       document.getElementById("eCompletionDate").value = t.completionDate || "";
       document.getElementById("eProgress").value = t.progress || 0;
-      document.getElementById("eAlarm").value = t.alarm || "";
+
+      var eAlParts = isoToJalaliDateTimeParts(t.alarm);
+      document.getElementById("eAlarmDate").value = eAlParts.dateStr;
+      document.getElementById("eAlarmTime").value = eAlParts.timeStr;
+
       document.getElementById("eResult").value = t.result || "";
       document.getElementById("eNextAction").value = t.nextAction || "";
       document.getElementById("eNotes").value = t.notes || "";
@@ -2337,6 +2859,7 @@
           t.status = document.getElementById("eStatus").value;
           var aUser = document.getElementById("eAssignee").value;
           t.assigneeUsername = aUser;
+          if (isManager() && aUser !== currentUser.username) t.referredByManager = true;
           for (var j = 0; j < usersList.length; j++) {
             if (usersList[j].username === aUser) { t.assigneeName = usersList[j].name; break; }
           }
@@ -2344,17 +2867,23 @@
           t.startDate = document.getElementById("eStartDate").value.trim();
           t.endDate = document.getElementById("eEndDate").value.trim();
           t.completionDate = document.getElementById("eCompletionDate").value.trim();
-          t.progress = Math.min(100, Math.max(0, parseInt(document.getElementById("eProgress").value, 10) || 0));
-          var newAlarm = document.getElementById("eAlarm").value.trim();
+
+          var newProg = Math.min(100, Math.max(0, parseInt(document.getElementById("eProgress").value, 10) || 0));
+          var newAlarm = jalaliDateTimeToIso(
+            document.getElementById("eAlarmDate").value,
+            document.getElementById("eAlarmTime").value
+          );
           if (t.alarm !== newAlarm) t.alerted = false;
           t.alarm = newAlarm;
+
           if (t.status === "تکمیل شده") {
-            t.done = true;
             t.progress = 100;
+            t.done = true;
             if (!t.completionDate) t.completionDate = getTodayJalaliStr();
           } else {
-            t.done = (t.progress === 100);
+            applyProgressState(t, newProg);
           }
+
           t.result = document.getElementById("eResult").value.trim();
           t.nextAction = document.getElementById("eNextAction").value.trim();
           t.notes = document.getElementById("eNotes").value.trim();
@@ -2370,15 +2899,7 @@
       var p = Math.min(100, Math.max(0, parseInt(val, 10) || 0));
       for (var i = 0; i < tasks.length; i++) {
         if (tasks[i].id === id && canUserAccessTask(tasks[i])) {
-          tasks[i].progress = p;
-          if (p === 100) {
-            tasks[i].status = "تکمیل شده";
-            tasks[i].done = true;
-            if (!tasks[i].completionDate) tasks[i].completionDate = getTodayJalaliStr();
-          } else {
-            tasks[i].done = false;
-            if (tasks[i].status === "تکمیل شده") tasks[i].status = "در حال انجام";
-          }
+          applyProgressState(tasks[i], p);
         }
       }
       saveTasksToServer();
@@ -2397,9 +2918,9 @@
     function markTaskDone(id) {
       for (var i = 0; i < tasks.length; i++) {
         if (tasks[i].id === id && canUserAccessTask(tasks[i])) {
+          applyProgressState(tasks[i], 100);
           tasks[i].status = "تکمیل شده";
           tasks[i].done = true;
-          tasks[i].progress = 100;
           if (!tasks[i].completionDate) tasks[i].completionDate = getTodayJalaliStr();
         }
       }
@@ -2408,6 +2929,7 @@
 
     function deleteTask(id) {
       tasks = tasks.filter(function (t) { return t.id !== id; });
+      if (!pendingDeletedTaskIds.some(function(x) { return Number((x && x.id) || x) === Number(id); })) pendingDeletedTaskIds.push({ id: id, deletedAt: Date.now() });
       saveTasksToServer();
     }
 
@@ -2427,8 +2949,23 @@
     }
 
     // =========================================================================
-    // 6. رندر جدول ۱۶ ستونی و داشبورد نمودارهای تحلیلی
+    // 6. رندر جدول ۱۶ ستونی و داشبورد نمودارهای تحلیلی و گزارش‌ها
     // =========================================================================
+    function getCategoryBadgeClass(cat) {
+      if (cat === "فعالیت اجرایی") return "cat-exec";
+      if (cat === "پیگیری") return "cat-follow";
+      if (cat === "اهداف عملیاتی") return "cat-opgoal";
+      if (cat === "اهداف و برنامه‌ها") return "cat-plan";
+      return "cat-task";
+    }
+
+    function getPriorityBadgeClass(prio) {
+      if (prio === "بحرانی") return "prio-critical";
+      if (prio === "بالا") return "prio-high";
+      if (prio === "پایین") return "prio-low";
+      return "prio-med";
+    }
+
     function getVisibleTasks() {
       var fExpert = isManager() ? (document.getElementById("filterExpert").value || "ALL") : "ALL";
       var fDept = document.getElementById("filterDept").value || "ALL";
@@ -2449,139 +2986,177 @@
       });
     }
 
-    function getCategoryBadge(cat) {
-      var c = cat || "فعالیت اجرایی";
-      if (c === "پیگیری") return "<span class='cat-pill cat-followup'>" + escapeHtml(c) + "</span>";
-      if (c === "اهداف عملیاتی") return "<span class='cat-pill cat-op-goal'>" + escapeHtml(c) + "</span>";
-      if (c === "اهداف و برنامه‌ها") return "<span class='cat-pill cat-prog-goal'>" + escapeHtml(c) + "</span>";
-      if (c === "تسک") return "<span class='cat-pill cat-task'>" + escapeHtml(c) + "</span>";
-      return "<span class='cat-pill cat-activity'>" + escapeHtml(c) + "</span>";
-    }
-
-    function getPriorityBadge(p) {
-      if (p === "بحرانی") return "<span class='prio-pill prio-critical'>بحرانی</span>";
-      if (p === "بالا") return "<span class='prio-pill prio-high'>بالا</span>";
-      if (p === "پایین") return "<span class='prio-pill prio-low'>پایین</span>";
-      return "<span class='prio-pill prio-medium'>" + escapeHtml(p || "متوسط") + "</span>";
-    }
-
-    function getStatusBadge(s) {
-      if (s === "تکمیل شده") return "<span class='stat-pill stat-done'>تکمیل شده</span>";
-      if (s === "در حال انجام") return "<span class='stat-pill stat-prog'>در حال انجام</span>";
-      if (s === "در انتظار تایید") return "<span class='stat-pill stat-wait'>در انتظار تایید</span>";
-      if (s === "متوقف شده" || s === "لغو شده") return "<span class='stat-pill stat-stop'>" + escapeHtml(s) + "</span>";
-      return "<span class='stat-pill stat-none'>" + escapeHtml(s || "شروع نشده") + "</span>";
-    }
-
     function renderTable() {
-      var tbody = document.getElementById("tableBody");
+      var tbody = document.getElementById("taskTableBody");
+      if (!tbody) return;
       var list = getVisibleTasks();
       var now = new Date();
       var html = "";
 
       for (var i = 0; i < list.length; i++) {
         var t = list[i];
-        var isDone = (t.status === "تکمیل شده" || t.done);
+        var isDone = (t.status === "تکمیل شده" || t.done || t.progress === 100);
+        var missingEnd = !t.endDate;
         var overdueAlarm = (!isDone && t.alarm && new Date(t.alarm) < now);
-        var missingEnd = (!isDone && !t.endDate);
         var rowCls = isDone ? "done-row" : (overdueAlarm ? "overdue-row" : (missingEnd ? "warn-row" : ""));
 
-        var assigneeHtml = "<span class='expert-tag'>" + escapeHtml(t.assigneeName) + "</span>";
-        if (t.createdByRole === "مدیر بازرگانی" && t.assigneeUsername !== t.createdByUsername) {
-          assigneeHtml += "<br/><span class='manager-tag'>ارجاع مدیر</span>";
-        }
-
-        var endDateHtml = t.endDate
-          ? "<span style='direction:ltr; display:inline-block;'>" + escapeHtml(t.endDate) + "</span>"
-          : "<span style='color:#d97706; font-size:11px; font-weight:bold;'>⚠️ نامشخص</span>";
-
+        var catCls = getCategoryBadgeClass(t.category);
+        var prioCls = getPriorityBadgeClass(t.priority);
         var jalaliAlarmDisplay = t.alarm
-          ? "<span class='jalali-pill'>" + escapeHtml(formatIsoToJalaliText(t.alarm)) + "</span> <button type='button' style='background:none;color:#dc2626;padding:2px 5px;font-size:11px;' onclick='clearAlarm(" + t.id + ")' title='حذف آلارم'>✖</button>"
-          : "<span style='color:#94a3b8; font-size:11.5px;'>بدون آلارم</span>";
+          ? "<span class='jalali-pill'>" + escapeHtml(formatIsoToJalaliText(t.alarm)) + "</span> <button type='button' style='background:none;color:#dc2626;padding:0 3px;font-size:12px;' title='حذف آلارم' onclick='clearAlarm(" + t.id + ")'>✖</button>"
+          : "<span style='color:#94a3b8;'>-</span>";
 
         html += "<tr class='" + rowCls + "'>";
         html += "<td><b>#" + t.id + "</b></td>";
-        html += "<td>" + getCategoryBadge(t.category) + "</td>";
-        html += "<td style='min-width:230px;'><b>" + escapeHtml(t.title) + "</b></td>";
-        html += "<td><span class='dept-pill'>" + escapeHtml(t.department) + "</span></td>";
-        html += "<td>" + getPriorityBadge(t.priority) + "</td>";
-        html += "<td>" + getStatusBadge(t.status) + "</td>";
-        html += "<td>" + assigneeHtml + "</td>";
+        html += "<td><span class='cat-pill " + catCls + "'>" + escapeHtml(t.category) + "</span></td>";
+        html += "<td><b>" + escapeHtml(t.title) + "</b></td>";
+        html += "<td><span class='dept-pill'>" + escapeHtml(t.department || "-") + "</span></td>";
+        html += "<td><span class='prio-badge " + prioCls + "'>" + escapeHtml(t.priority || "متوسط") + "</span></td>";
+        html += "<td>" + escapeHtml(t.status || "در حال انجام") + "</td>";
+        var assigneeCell = t.referredByManager
+          ? "<div style='font-weight:800;color:#1d4ed8;'>ارجاع شده از مدیر</div><div style='margin-top:3px;font-size:12px;color:#334155;'>" + escapeHtml(t.assigneeName || "-") + "</div>"
+          : escapeHtml(t.assigneeName || "-");
+        html += "<td>" + assigneeCell + "</td>";
         html += "<td>" + escapeHtml(t.month || "-") + "</td>";
         html += "<td style='direction:ltr;'>" + escapeHtml(t.startDate || "-") + "</td>";
-        html += "<td>" + endDateHtml + "</td>";
+        html += "<td style='direction:ltr;'>" + escapeHtml(t.endDate || "⚠️ نامشخص") + "</td>";
         html += "<td style='direction:ltr;'>" + escapeHtml(t.completionDate || "-") + "</td>";
-        html += "<td style='white-space:nowrap;'><input type='range' min='0' max='100' step='10' value='" + (t.progress || 0) + "' oninput='setProgress(" + t.id + ", this.value)' /> <b>" + (t.progress || 0) + "%</b></td>";
+        html += "<td style='white-space:nowrap;'><input type='range' min='0' max='100' step='10' value='" + (t.progress || 0) + "' oninput='setProgress(" + t.id + ", this.value)' style='width:68px;vertical-align:middle;' /> <b>" + (t.progress || 0) + "%</b></td>";
         html += "<td>" + jalaliAlarmDisplay + "</td>";
         html += "<td>" + escapeHtml(t.result || "-") + "</td>";
         html += "<td>" + escapeHtml(t.nextAction || "-") + "</td>";
         html += "<td>" + escapeHtml(t.notes || "-") + "</td>";
-        html += "<td style='white-space:nowrap;'>";
-        html += "<button type='button' class='btn-edit' onclick='openEditModal(" + t.id + ")'>✏️ ویرایش</button> ";
-        if (!isDone) html += "<button type='button' class='btn-done' onclick='markTaskDone(" + t.id + ")'>✔ تکمیل</button> ";
-        if (isManager() || t.createdByUsername === currentUser.username) html += "<button type='button' class='btn-del' onclick='deleteTask(" + t.id + ")'>🗑️</button>";
-        html += "</td>";
+        html += "<td><div class='action-btns'>";
+        html += "<button type='button' class='btn-edit' onclick='openEditModal(" + t.id + ")'>✏️ ویرایش</button>";
+        if (!isDone) html += "<button type='button' class='btn-done' onclick='markTaskDone(" + t.id + ")'>✔ تکمیل</button>";
+        if (isManager() || t.createdByUsername === currentUser.username) html += "<button type='button' class='btn-del' onclick='deleteTask(" + t.id + ")'>🗑 حذف</button>";
+        html += "</div></td>";
         html += "</tr>";
       }
 
       if (!html) {
-        html = "<tr><td colspan='17' style='text-align:center; padding:20px; color:#64748b;'>موردی برای نمایش با فیلتر فعلی وجود ندارد.</td></tr>";
+        html = "<tr><td colspan='17' style='text-align:center; padding:22px; color:#64748b;'>هیچ موردی با فیلتر فعلی یافت نشد.</td></tr>";
       }
       tbody.innerHTML = html;
     }
 
     function renderBarGroup(title, countsMap, totalCount, colorHex) {
-      var html = "<div class='chart-card'><h4>" + escapeHtml(title) + "</h4>";
       var keys = Object.keys(countsMap);
-      if (keys.length === 0) {
-        html += "<div style='color:#94a3b8; font-size:12px;'>داده‌ای موجود نیست</div></div>";
-        return html;
-      }
+      var rowsHtml = "";
       for (var i = 0; i < keys.length; i++) {
         var k = keys[i];
-        var v = countsMap[k];
-        var pct = totalCount > 0 ? Math.round((v / totalCount) * 100) : 0;
-        html += "<div class='bar-row'>";
-        html += "<div class='bar-label'><span><b>" + escapeHtml(k) + "</b></span><span>" + v + " مورد (" + pct + "%)</span></div>";
-        html += "<div class='bar-track'><div class='bar-fill' style='width:" + pct + "%; background:" + colorHex + ";'></div></div>";
-        html += "</div>";
+        var cnt = countsMap[k];
+        var pct = totalCount > 0 ? Math.round((cnt / totalCount) * 100) : 0;
+        rowsHtml += "<div class='bar-row'>" +
+          "<div class='bar-label-row'><span>" + escapeHtml(k || "نامشخص") + "</span><span><b>" + cnt + "</b> (" + pct + "%)</span></div>" +
+          "<div class='bar-track'><div class='bar-fill' style='width:" + pct + "%; background:" + colorHex + ";'></div></div>" +
+          "</div>";
       }
-      html += "</div>";
-      return html;
+      if (!rowsHtml) rowsHtml = "<div style='font-size:12px; color:#94a3b8;'>داده‌ای برای نمایش وجود ندارد.</div>";
+      return "<div class='chart-box'><div class='chart-title'>" + escapeHtml(title) + "</div>" + rowsHtml + "</div>";
+    }
+
+    function renderProgressRateGroup(title, statsMap, colorHex) {
+      var keys = Object.keys(statsMap);
+      var rowsHtml = "";
+      for (var i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        var st = statsMap[k];
+        var avg = st.count > 0 ? Math.round(st.sumProg / st.count) : 0;
+        rowsHtml += "<div class='bar-row'>" +
+          "<div class='bar-label-row'><span>" + escapeHtml(k || "نامشخص") + " (" + st.done + "/" + st.count + " تکمیل)</span><span><b>" + avg + "%</b></span></div>" +
+          "<div class='bar-track'><div class='bar-fill' style='width:" + avg + "%; background:" + colorHex + ";'></div></div>" +
+          "</div>";
+      }
+      if (!rowsHtml) rowsHtml = "<div style='font-size:12px; color:#94a3b8;'>داده‌ای برای نمایش وجود ندارد.</div>";
+      return "<div class='chart-box'><div class='chart-title'>" + escapeHtml(title) + "</div>" + rowsHtml + "</div>";
     }
 
     function renderDashboard() {
       var list = getVisibleTasks();
-      var total = list.length, doneCnt = 0, progCnt = 0, critCnt = 0, sumProg = 0;
-      var byDept = {}, byStatus = {}, byPrio = {}, byResp = {};
+      var monthFilter = document.getElementById("dashboardMonthFilter");
+      if (monthFilter && monthFilter.value && monthFilter.value !== "ALL") {
+        list = list.filter(function(t){ return t.month === monthFilter.value; });
+      }
+      var total = list.length, doneCnt = 0, progCnt = 0, critCnt = 0, overdueCnt = 0, sumProg = 0;
+      var byDept = {}, byStatus = {}, byPrio = {}, byResp = {}, byMonth = {};
+      var deptPerf = {}, respPerf = {};
+      var todayStr = getTodayJalaliStr();
+      var now = new Date();
 
       for (var i = 0; i < list.length; i++) {
         var t = list[i];
-        if (t.status === "تکمیل شده" || t.done) doneCnt++;
+        var isDone = (t.status === "تکمیل شده" || t.done || t.progress === 100);
+        if (isDone) doneCnt++;
         else progCnt++;
         if (t.priority === "بحرانی") critCnt++;
+        if (!isDone && ((t.endDate && t.endDate < todayStr) || (t.alarm && new Date(t.alarm) < now))) overdueCnt++;
         sumProg += (t.progress || 0);
 
-        byDept[t.department] = (byDept[t.department] || 0) + 1;
+        var dKey = t.department || "نامشخص";
+        var rKey = t.assigneeName || "نامشخص";
+        var mKey = t.month || "نامشخص";
+
+        byDept[dKey] = (byDept[dKey] || 0) + 1;
         byStatus[t.status] = (byStatus[t.status] || 0) + 1;
         byPrio[t.priority] = (byPrio[t.priority] || 0) + 1;
-        byResp[t.assigneeName] = (byResp[t.assigneeName] || 0) + 1;
+        byResp[rKey] = (byResp[rKey] || 0) + 1;
+        byMonth[mKey] = (byMonth[mKey] || 0) + 1;
+
+        if (!deptPerf[dKey]) deptPerf[dKey] = { count: 0, done: 0, sumProg: 0 };
+        deptPerf[dKey].count += 1;
+        if (isDone) deptPerf[dKey].done += 1;
+        deptPerf[dKey].sumProg += (t.progress || 0);
+
+        if (!respPerf[rKey]) respPerf[rKey] = { count: 0, done: 0, sumProg: 0 };
+        respPerf[rKey].count += 1;
+        if (isDone) respPerf[rKey].done += 1;
+        respPerf[rKey].sumProg += (t.progress || 0);
       }
 
       var avgProg = total > 0 ? Math.round(sumProg / total) : 0;
+      var donePct = total > 0 ? Math.round((doneCnt / total) * 100) : 0;
 
       document.getElementById("kpiGrid").innerHTML =
         "<div class='kpi-card'><div style='font-size:12px; color:#64748b;'>کل اقدامات قابل مشاهده</div><div class='kpi-val'>" + total + "</div></div>" +
-        "<div class='kpi-card'><div style='font-size:12px; color:#15803d;'>تکمیل شده</div><div class='kpi-val' style='color:#15803d;'>" + doneCnt + "</div></div>" +
+        "<div class='kpi-card'><div style='font-size:12px; color:#15803d;'>تکمیل شده</div><div class='kpi-val' style='color:#15803d;'>" + doneCnt + " (" + donePct + "%)</div></div>" +
         "<div class='kpi-card'><div style='font-size:12px; color:#1d4ed8;'>باز / در جریان</div><div class='kpi-val' style='color:#1d4ed8;'>" + progCnt + "</div></div>" +
-        "<div class='kpi-card'><div style='font-size:12px; color:#b91c1c;'>اولویت بحرانی</div><div class='kpi-val' style='color:#b91c1c;'>" + critCnt + "</div></div>" +
+        "<div class='kpi-card'><div style='font-size:12px; color:#b91c1c;'>اولویت بحرانی / عقب‌افتاده</div><div class='kpi-val' style='color:#b91c1c;'>" + critCnt + " / " + overdueCnt + "</div></div>" +
         "<div class='kpi-card'><div style='font-size:12px; color:#0f766e;'>میانگین درصد پیشرفت</div><div class='kpi-val' style='color:#0f766e;'>" + avgProg + "%</div></div>";
 
       document.getElementById("chartsGrid").innerHTML =
-        renderBarGroup("توزیع بر اساس دپارتمان", byDept, total, "#1e3a8a") +
-        renderBarGroup("توزیع بر اساس وضعیت", byStatus, total, "#0f766e") +
-        renderBarGroup("توزیع بر اساس اولویت", byPrio, total, "#dc2626") +
-        renderBarGroup("توزیع بر اساس کارشناس مسئول", byResp, total, "#6d28d9");
+        renderBarGroup("تعداد و درصد بر اساس دپارتمان", byDept, total, "#1e3a8a") +
+        renderBarGroup("تعداد و درصد بر اساس وضعیت", byStatus, total, "#0f766e") +
+        renderBarGroup("تعداد و درصد بر اساس اولویت", byPrio, total, "#dc2626") +
+        renderBarGroup("تعداد و درصد بر اساس مسئول", byResp, total, "#6d28d9") +
+        renderProgressRateGroup("درصد میانگین پیشرفت به تفکیک دپارتمان", deptPerf, "#0284c7") +
+        renderProgressRateGroup("درصد میانگین پیشرفت به تفکیک مسئول", respPerf, "#15803d");
+
+      var monthRows = "";
+      for (var mIdx = 0; mIdx < JALALI_MONTHS.length; mIdx++) {
+        var mn = JALALI_MONTHS[mIdx];
+        var cntM = byMonth[mn] || 0;
+        if (cntM > 0) {
+          var pctM = total > 0 ? Math.round((cntM / total) * 100) : 0;
+          monthRows += "<tr><td><b>" + escapeHtml(mn) + "</b></td><td>" + cntM + "</td><td>" + pctM + "%</td></tr>";
+        }
+      }
+      if (!monthRows) monthRows = "<tr><td colspan='3' style='text-align:center; color:#94a3b8;'>اقدامی ثبت نشده است</td></tr>";
+
+      var overdueRows = "";
+      for (var k = 0; k < list.length; k++) {
+        var item = list[k];
+        var itemDone = (item.status === "تکمیل شده" || item.done || item.progress === 100);
+        var isOver = !itemDone && ((item.endDate && item.endDate < todayStr) || (item.alarm && new Date(item.alarm) < now));
+        if (isOver) {
+          overdueRows += "<tr><td><b>#" + item.id + "</b></td><td>" + escapeHtml(item.title) + "</td><td>" + escapeHtml(item.assigneeName || "-") + "</td><td style='direction:ltr;'>" + escapeHtml(item.endDate || "-") + "</td><td>" + (item.progress || 0) + "%</td></tr>";
+        }
+      }
+      if (!overdueRows) overdueRows = "<tr><td colspan='5' style='text-align:center; color:#15803d;'>مورد عقب‌افتاده‌ای وجود ندارد</td></tr>";
+
+      document.getElementById("extraReportsGrid").innerHTML =
+        "<div class='chart-box'><div class='chart-title'>📅 گزارش توزیع ماهانه اقدامات</div><table class='mini-report-table'><thead><tr><th>ماه</th><th>تعداد</th><th>درصد سهم</th></tr></thead><tbody>" + monthRows + "</tbody></table></div>" +
+        "<div class='chart-box'><div class='chart-title'>⚠️ گزارش اقدامات عقب‌افتاده / نیازمند پیگیری</div><table class='mini-report-table'><thead><tr><th>کد</th><th>شرح اقدام</th><th>مسئول</th><th>سررسید</th><th>پیشرفت</th></tr></thead><tbody>" + overdueRows + "</tbody></table></div>";
     }
 
     function exportCorporateXlsx() {
@@ -2617,6 +3192,11 @@
     document.getElementById("loginBtn").addEventListener("click", doLogin);
     document.getElementById("loginPassword").addEventListener("keydown", function (e) { if (e.key === "Enter") doLogin(); });
     document.getElementById("logoutBtn").addEventListener("click", doLogout);
+
+    document.getElementById("toggleGuideBtn").addEventListener("click", function () {
+      document.getElementById("guidePanel").classList.toggle("hidden");
+    });
+    document.getElementById("dashboardMonthFilter").addEventListener("change", renderDashboard);
 
     document.getElementById("toggleDashBtn").addEventListener("click", function () {
       var p = document.getElementById("dashboardPanel");
@@ -2667,7 +3247,7 @@
       var changed = false;
       for (var i = 0; i < tasks.length; i++) {
         var t = tasks[i];
-        var isRelevant = isManager() || (t.assigneeUsername === currentUser.username);
+        var isRelevant = isManager() || (t.assigneeUsername === currentUser.username) || (t.department === "کلیه کارشناس ها");
         if (isRelevant && !t.done && t.alarm && !t.alerted && new Date(t.alarm) <= now) {
           t.alerted = true;
           changed = true;
@@ -2678,8 +3258,115 @@
       if (changed) saveTasksToServer();
     }, 15000);
 
-    setInterval(syncFromServer, 5000);
+    setInterval(function() { if (navigator.onLine && document.visibilityState !== "hidden") syncFromServer(); }, 15000);
+    window.addEventListener("online", function() { if (currentUser) syncFromServer(); });
+    window.addEventListener("focus", function() { if (currentUser && navigator.onLine) syncFromServer(); });
+    document.addEventListener("visibilitychange", function() { if (document.visibilityState === "visible" && currentUser && navigator.onLine) syncFromServer(); });
     checkSavedSession();
+
+    // =========================================================================
+    // 8. تقویم انتخابگر هجری شمسی برای فیلد آلارم
+    // =========================================================================
+    var activeJalaliTargetId = null;
+
+    function getJalaliDayOfWeek(jy, jm, jd) {
+      var g = jalaliToGregorian(jy, jm, jd);
+      var d = new Date(g.gy, g.gm - 1, g.gd);
+      // Convert JS getDay (0=Sun..6=Sat) to Persian week (0=Sat..6=Fri)
+      return (d.getDay() + 1) % 7;
+    }
+
+    function openJalaliPicker(inputId, btnEl) {
+      activeJalaliTargetId = inputId;
+      var popup = document.getElementById("jalaliPickerPopup");
+      var inp = document.getElementById(inputId);
+      var todayJ = getTodayJalali();
+      var selY = todayJ.jy, selM = todayJ.jm;
+
+      if (inp && inp.value) {
+        var m = toEnglishDigits(inp.value.trim()).match(/^(1[34]\d{2})\/(\d{1,2})\/(\d{1,2})$/);
+        if (m) {
+          selY = parseInt(m[1], 10);
+          selM = Math.min(12, Math.max(1, parseInt(m[2], 10)));
+        }
+      }
+
+      renderJalaliPickerGrid(selY, selM);
+      var rect = btnEl.getBoundingClientRect();
+      popup.style.top = Math.min(window.innerHeight - 290, rect.bottom + 6) + "px";
+      popup.style.left = Math.max(10, Math.min(window.innerWidth - 285, rect.left)) + "px";
+      popup.classList.remove("hidden");
+    }
+
+    function renderJalaliPickerGrid(jy, jm) {
+      var popup = document.getElementById("jalaliPickerPopup");
+      var todayJ = getTodayJalali();
+      var daysInMonth = getJalaliMonthDays(jy, jm);
+      var firstDow = getJalaliDayOfWeek(jy, jm, 1);
+
+      var yearOpts = "";
+      for (var y = todayJ.jy - 1; y <= todayJ.jy + 3; y++) {
+        yearOpts += "<option value='" + y + "'" + (y === jy ? " selected" : "") + ">" + y + "</option>";
+      }
+      var monthOpts = "";
+      for (var m = 1; m <= 12; m++) {
+        monthOpts += "<option value='" + m + "'" + (m === jm ? " selected" : "") + ">" + JALALI_MONTHS[m - 1] + "</option>";
+      }
+
+      var html = "<div class='jcal-head'>" +
+        "<select id='jcalMonthSel' onchange='onJalaliPickerHeaderChange()'>" + monthOpts + "</select>" +
+        "<select id='jcalYearSel' onchange='onJalaliPickerHeaderChange()'>" + yearOpts + "</select>" +
+        "<button type='button' style='background:#f1f5f9;color:#334155;padding:3px 7px;font-size:11px;' onclick='closeJalaliPicker()'>✖</button>" +
+        "</div>";
+
+      var dows = ["ش", "ی", "د", "س", "چ", "پ", "ج"];
+      html += "<div class='jcal-grid'>";
+      for (var d = 0; d < 7; d++) html += "<div class='jcal-dow'>" + dows[d] + "</div>";
+      for (var blank = 0; blank < firstDow; blank++) html += "<div></div>";
+
+      for (var day = 1; day <= daysInMonth; day++) {
+        var isToday = (jy === todayJ.jy && jm === todayJ.jm && day === todayJ.jd);
+        var dateStr = jy + "/" + pad2(jm) + "/" + pad2(day);
+        html += "<div class='jcal-day" + (isToday ? " today" : "") + "' onclick=\"selectJalaliPickerDate('" + dateStr + "')\">" + day + "</div>";
+      }
+      html += "</div>";
+      html += "<div style='display:flex;justify-content:space-between;margin-top:8px;'>" +
+        "<button type='button' style='background:#0f766e;color:#fff;padding:4px 9px;font-size:11px;' onclick=\"selectJalaliPickerDate('" + getTodayJalaliStr() + "')\">امروز (" + getTodayJalaliStr() + ")</button>" +
+        "<button type='button' style='background:#fee2e2;color:#991b1b;padding:4px 9px;font-size:11px;' onclick=\"selectJalaliPickerDate('')\">پاک کردن</button>" +
+        "</div>";
+      popup.innerHTML = html;
+    }
+
+    function onJalaliPickerHeaderChange() {
+      var y = parseInt(document.getElementById("jcalYearSel").value, 10);
+      var m = parseInt(document.getElementById("jcalMonthSel").value, 10);
+      renderJalaliPickerGrid(y, m);
+    }
+
+    function selectJalaliPickerDate(val) {
+      if (activeJalaliTargetId) {
+        var inp = document.getElementById(activeJalaliTargetId);
+        if (inp) inp.value = val;
+      }
+      closeJalaliPicker();
+    }
+
+    function closeJalaliPicker() {
+      var popup = document.getElementById("jalaliPickerPopup");
+      if (popup) popup.classList.add("hidden");
+    }
+
+    document.addEventListener("click", function (e) {
+      var popup = document.getElementById("jalaliPickerPopup");
+      if (!popup || popup.classList.contains("hidden")) return;
+      if (!popup.contains(e.target) && !e.target.classList.contains("jcal-btn")) {
+        closeJalaliPicker();
+      }
+    });
+
   </script>
+  <!-- تقویم انتخابگر هجری شمسی -->
+  <div id="jalaliPickerPopup" class="jcal-popup hidden"></div>
+
 </body>
 </html>
